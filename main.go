@@ -3,6 +3,7 @@ package main
 import (
 	"backend_relawanku/config"
 	controller "backend_relawanku/controller/auth"
+	"backend_relawanku/middleware"
 	repo "backend_relawanku/repository/auth"
 	"backend_relawanku/routes"
 	service "backend_relawanku/service/auth"
@@ -18,9 +19,10 @@ func main() {
 	config.MigrateDB(db)
 
 	e := echo.New()
+	authJwt := middleware.JwtAlta{}
 
 	authRepo := repo.NewAuthRepository(db)
-	authService := service.NewAuthService(authRepo)
+	authService := service.NewAuthService(authRepo, authJwt)
 	authController := controller.NewAuthController(authService)
 
 	routeController := routes.RouteController{

@@ -12,4 +12,5 @@ type RouteController struct {
 
 func (rc RouteController) InitRoute(e *echo.Echo) {
 	e.POST("/api/v1/register", rc.AuthController.RegisterController)
+	e.POST("/api/v1/login", rc.AuthController.LoginController)
 }

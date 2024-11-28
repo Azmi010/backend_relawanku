@@ -31,3 +31,14 @@ func (authController AuthController) RegisterController(c echo.Context) error {
 	}
 	return base.SuccessResponse(c, response.RegisterFromModel(user))
 }
+
+func (authController AuthController) LoginController(c echo.Context) error {
+	userLogin := request.LoginRequest{}
+	c.Bind(&userLogin)
+	user, token, err := authController.authServiceInterface.Login(userLogin.LoginToModelUser(), userLogin.LoginToModelAdmin())
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+
+	return base.SuccessResponse(c, response.LoginFromModel(user, token))
+}
