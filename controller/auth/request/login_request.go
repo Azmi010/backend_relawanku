@@ -20,16 +20,3 @@ func (loginRequest LoginRequest) LoginToModelAdmin() model.Admin {
 		Password: loginRequest.Password,
 	}
 }
-
-// func (loginRequest LoginRequest) LoginToModel(userType string) interface{} {
-// 	if userType == "admin" {
-// 		return model.Admin{
-// 			Username: loginRequest.Username,
-// 			Password: loginRequest.Password,
-// 		}
-// 	}
-// 	return model.User{
-// 		Username: loginRequest.Username,
-// 		Password: loginRequest.Password,
-// 	}
-// }

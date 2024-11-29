@@ -42,3 +42,22 @@ func (authRepo AuthRepo) LoginAdmin(admin model.Admin) (model.Admin, error) {
 	}
 	return userDb.ToModelAdmin(), nil
 }
+
+func (authRepo AuthRepo) IsUsernameOrEmailExists(username string, email string) (bool, error) {
+	var userCount int64
+	var adminCount int64
+
+	if err := authRepo.db.Model(&model.User{}).Where("username = ? OR email = ?", username, email).Count(&userCount).Error; err != nil {
+		return false, err
+	}
+
+	if err := authRepo.db.Model(&model.Admin{}).Where("username = ? OR email = ?", username, email).Count(&adminCount).Error; err != nil {
+		return false, err
+	}
+
+	if userCount > 0 || adminCount > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}

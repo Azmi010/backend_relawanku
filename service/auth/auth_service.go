@@ -22,6 +22,15 @@ type AuthService struct {
 }
 
 func (authService AuthService) Register(user model.User) (model.User, error) {
+	isExists, err := authService.authRepoInterface.IsUsernameOrEmailExists(user.Username, user.Email)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	if isExists {
+		return model.User{}, errors.New("username or email already exists")
+	}
+	
 	hashedPassword, err := HashPassword(user.Password)
 	if err != nil {
 		return model.User{}, errors.New("failed to hash password")
