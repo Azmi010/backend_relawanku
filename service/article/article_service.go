@@ -24,3 +24,15 @@ func (articleService ArticleService) CreateArticle(article model.Article) (model
 
 	return createdArticle, nil
 }
+
+func (articleService ArticleService) GetAllArticles() ([]model.Article, error) {
+	return articleService.articleRepoInterface.GetAllArticles()
+}
+
+func (articleService ArticleService) GetArticlesByCategory(category string) ([]model.Article, error) {
+	return articleService.articleRepoInterface.GetArticlesByCategory(category)
+}
+
+func (articleService ArticleService) GetArticleByID(id uint) (model.Article, error) {
+	return articleService.articleRepoInterface.GetArticleByID(id)
+}
