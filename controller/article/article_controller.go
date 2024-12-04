@@ -27,11 +27,53 @@ func (articleController ArticleController) CreateArticleController(c echo.Contex
 		return base.ErrorResponse(c, err)
 	}
 
-	user, err := articleController.articleServiceInterface.CreateArticle(articleCreated.CreateArticleToModel())
+	file, fileHeader, err := c.Request().FormFile("image_url")
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("failed to read image file"))
+	}
+	defer file.Close()
+
+	createdArticle, err := articleController.articleServiceInterface.CreateArticle(articleCreated.CreateArticleToModel(), file, fileHeader)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
-	return base.SuccessResponse(c, response.CreateArticleFromModel(user))
+
+	return base.SuccessResponse(c, response.CreateArticleFromModel(createdArticle))
+}
+
+func (articleController ArticleController) UpdateArticleController(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("invalid article ID"))
+	}
+
+	updateRequest := request.UpdateArticleRequest{}
+	if err := c.Bind(&updateRequest); err != nil {
+		return base.ErrorResponse(c, err)
+	}
+
+	updatedArticle, err := articleController.articleServiceInterface.UpdateArticle(uint(id), updateRequest.UpdateArticleToModel())
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+
+	return base.SuccessResponse(c, response.UpdateArticleFromModel(updatedArticle))
+}
+
+func (articleController ArticleController) DeleteArticleController(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("invalid article ID"))
+	}
+
+	err = articleController.articleServiceInterface.DeleteArticle(uint(id))
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+
+	return base.SuccessResponse(c, "Article deleted successfully")
 }
 
 func (articleController ArticleController) GetAllArticlesController(c echo.Context) error {

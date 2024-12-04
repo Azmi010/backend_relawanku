@@ -2,6 +2,7 @@ package article
 
 import (
 	"backend_relawanku/model"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -23,6 +24,38 @@ func (articleRepo ArticleRepo) CreateArticle(article model.Article) (model.Artic
 		return model.Article{}, result.Error
 	}
 	return articleDb.ToModelArticle(), nil
+}
+
+func (articleRepo ArticleRepo) UpdateArticle(articleId uint, article model.Article) (model.Article, error) {
+	articleDb := FromModelArticle(article)
+	result := articleRepo.db.First(&articleDb, articleId)
+	if result.Error != nil {
+		return model.Article{}, result.Error
+	}
+
+	articleDb.Title = article.Title
+	articleDb.Content = article.Content
+	articleDb.Category = article.Category
+	articleDb.ImageUrl = article.ImageUrl
+	articleDb.UpdatedAt = time.Now()
+
+	saveResult := articleRepo.db.Save(&articleDb)
+	if saveResult.Error != nil {
+		return model.Article{}, saveResult.Error
+	}
+
+	return articleDb.ToModelArticle(), nil
+}
+
+func (articleRepo ArticleRepo) DeleteArticle(articleId uint) error {
+	var articleDb Article
+	result := articleRepo.db.First(&articleDb, articleId)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	deleteResult := articleRepo.db.Delete(&articleDb)
+	return deleteResult.Error
 }
 
 func (articleRepo ArticleRepo) GetAllArticles() ([]model.Article, error) {
