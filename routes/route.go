@@ -23,9 +23,16 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eAdmin := eJWT.Group("/admin")
 	eAdmin.POST("/api/v1/program", rc.ProgramController.CreateProgram)
 	eAdmin.GET("/api/v1/programs", rc.ProgramController.GetAllPrograms)
-	eAdmin.GET("/api/v1/program/:id", rc.ProgramController.GetProgramByID)
+	// eAdmin.GET("/api/v1/program/:id", rc.ProgramController.GetProgramByID)
 	eAdmin.GET("/api/v1/program/category/:category", rc.ProgramController.GetProgramsByCategory) 
 	eAdmin.GET("/api/v1/program/latest", rc.ProgramController.GetLatestProgram) 
 	eAdmin.PUT("/api/v1/program/:id", rc.ProgramController.UpdateProgram)
 	eAdmin.DELETE("/api/v1/program/:id", rc.ProgramController.DeleteProgram)
+
+	eUser := eJWT.Group("/user")
+	eUser.GET("/api/v1/programs", rc.ProgramController.GetAllPrograms)
+	eUser.GET("/api/v1/program/:id", rc.ProgramController.GetProgramByID)
+	eUser.GET("/api/v1/program/category/:category", rc.ProgramController.GetProgramsByCategory) 
+	eUser.GET("/api/v1/program/latest", rc.ProgramController.GetLatestProgram) 
+
 }
