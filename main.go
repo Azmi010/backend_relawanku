@@ -2,11 +2,14 @@ package main
 
 import (
 	"backend_relawanku/config"
-	controller "backend_relawanku/controller/auth"
+	authController "backend_relawanku/controller/auth"
+	articleController "backend_relawanku/controller/article"
 	"backend_relawanku/middleware"
-	repo "backend_relawanku/repository/auth"
+	authRepo "backend_relawanku/repository/auth"
+	articleRepo "backend_relawanku/repository/article"
 	"backend_relawanku/routes"
-	service "backend_relawanku/service/auth"
+	authService "backend_relawanku/service/auth"
+	articleService "backend_relawanku/service/article"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -21,12 +24,17 @@ func main() {
 	e := echo.New()
 	authJwt := middleware.JwtAlta{}
 
-	authRepo := repo.NewAuthRepository(db)
-	authService := service.NewAuthService(authRepo, authJwt)
-	authController := controller.NewAuthController(authService)
+	authRepo := authRepo.NewAuthRepository(db)
+	authService := authService.NewAuthService(authRepo, authJwt)
+	authController := authController.NewAuthController(authService)
+
+	articleRepo := articleRepo.NewArticleRepository(db)
+	articleService := articleService.NewArticleService(articleRepo)
+	articleController := articleController.NewArticleController(articleService)
 
 	routeController := routes.RouteController{
 		AuthController:   authController,
+		ArticleController: articleController,
 	}
 	routeController.InitRoute(e)
 
