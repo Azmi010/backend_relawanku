@@ -2,14 +2,23 @@ package main
 
 import (
 	"backend_relawanku/config"
-	controller "backend_relawanku/controller/auth"
+
 	controllerPro "backend_relawanku/controller/program" 
-	"backend_relawanku/middleware"
-	repo "backend_relawanku/repository/auth"
 	repoPro "backend_relawanku/repository/program" 
+
 	"backend_relawanku/routes"
-	service "backend_relawanku/service/auth"
+
 	servicePro "backend_relawanku/service/program" 
+	authController "backend_relawanku/controller/auth"
+	articleController "backend_relawanku/controller/article"
+
+	"backend_relawanku/middleware"
+
+	authRepo "backend_relawanku/repository/auth"
+	articleRepo "backend_relawanku/repository/article"
+	authService "backend_relawanku/service/auth"
+	articleService "backend_relawanku/service/article"
+	
 	"log"
 
 	"github.com/joho/godotenv"
@@ -25,9 +34,13 @@ func main() {
 	authJwt := middleware.JwtAlta{}
 
 	// Auth setup
-	authRepo := repo.NewAuthRepository(db)
-	authService := service.NewAuthService(authRepo, authJwt)
-	authController := controller.NewAuthController(authService)
+	authRepo := authRepo.NewAuthRepository(db)
+	authService := authService.NewAuthService(authRepo, authJwt)
+	authController := authController.NewAuthController(authService)
+
+	articleRepo := articleRepo.NewArticleRepository(db)
+	articleService := articleService.NewArticleService(articleRepo)
+	articleController := articleController.NewArticleController(articleService)
 
 	programRepo := repoPro.NewProgramRepository(db)  
 	programService := servicePro.NewProgramService(programRepo)  
@@ -36,6 +49,7 @@ func main() {
 	routeController := routes.RouteController{
 		AuthController:   authController,
 		ProgramController: programController,  
+		ArticleController: articleController,
 	}
 	routeController.InitRoute(e)
 

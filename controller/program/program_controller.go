@@ -4,6 +4,7 @@ import (
 	"backend_relawanku/controller/base"
 	"backend_relawanku/model"
 	"backend_relawanku/service/program"
+	"errors"
 
 	"strconv"
 
@@ -23,7 +24,14 @@ func (ctrl *ProgramController) CreateProgram(c echo.Context) error {
 	if err := c.Bind(&program); err != nil {
 		return base.ErrorResponse(c, err)
 	}
-	createdProgram, err := ctrl.service.CreateProgram(program)
+
+	file, fileHeader, err := c.Request().FormFile("image_url")
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("failed to read image file"))
+	}
+	defer file.Close()
+
+	createdProgram, err := ctrl.service.CreateProgram(program, file, fileHeader)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -63,7 +71,13 @@ func (ctrl *ProgramController) UpdateProgram(c echo.Context) error {
 		return base.ErrorResponse(c, err)
 	}
 
-	program, err := ctrl.service.UpdateProgram(uint(id), updatedProgram)
+	file, fileHeader, err := c.Request().FormFile("image_url")
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("failed to read image file"))
+	}
+	defer file.Close()
+
+	program, err := ctrl.service.UpdateProgram(uint(id), updatedProgram, file, fileHeader)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
