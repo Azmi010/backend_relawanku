@@ -10,4 +10,6 @@ type DonasiServiceInterface interface {
 	UpdateDonasi(donasiId uint, donasi model.Donasi, file multipart.File, fileHeader *multipart.FileHeader) (model.Donasi, error)
 	DeleteDonasi(donasiId uint) error
 	GetAllDonasi() ([]model.Donasi, error)
+	GetDonasiByCategory(category string) ([]model.Donasi, error)
+	GetDonasiById(donasiId uint) (model.Donasi, error)
 }

@@ -89,3 +89,27 @@ func (donasiController DonasiController) GetAllDonasiController(c echo.Context) 
 	}
 	return base.SuccessResponse(c, donasiList)
 }
+
+func (donasiController DonasiController) GetDonasiByCategoryController(c echo.Context) error {
+	category := c.Param("category")
+
+	donasiList, err := donasiController.donasiServiceInterfae.GetDonasiByCategory(category)
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+	return base.SuccessResponse(c, donasiList)
+}
+
+func (donasiController DonasiController) GetDonasiByIdController(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("invalid donasi ID"))
+	}
+
+	donasi, err := donasiController.donasiServiceInterfae.GetDonasiById(uint(id))
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+	return base.SuccessResponse(c, donasi)
+}

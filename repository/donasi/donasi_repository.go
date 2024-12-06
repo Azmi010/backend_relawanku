@@ -69,3 +69,20 @@ func (donasiRepo DonasiRepo) GetAllDonasi() ([]model.Donasi, error) {
 	}
 	return donasiDb, nil
 }
+
+func (donasiRepo DonasiRepo) GetDonasiByCategory(category string) ([]model.Donasi, error) {
+	var donasiDb []model.Donasi
+	if err := donasiRepo.db.Where("category = ?", category).Find(&donasiDb).Error; err != nil {
+		return nil, err
+	}
+	return donasiDb, nil
+}
+
+func (donasiRepo DonasiRepo) GetDonasiById(donasiId uint) (model.Donasi, error) {
+	var donasiDb model.Donasi
+	result := donasiRepo.db.First(&donasiDb, donasiId)
+	if result.Error != nil {
+		return model.Donasi{}, nil
+	}
+	return donasiDb, nil
+}

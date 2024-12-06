@@ -26,7 +26,10 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTAdmin.DELETE("/api/v1/donasi/:id", rc.DonasiController.DeleteDonasiController)
 	eJWTAdmin.GET("/api/v1/donasi", rc.DonasiController.GetAllDonasiController)
 
-	// eJWTUser := e.Group("/user", echojwt.WithConfig(echojwt.Config{
-	// 	SigningKey: []byte(os.Getenv("JWT_SECRET_KEY_USER")),
-	// }))
+	eJWTUser := e.Group("/user", echojwt.WithConfig(echojwt.Config{
+		SigningKey: []byte(os.Getenv("JWT_SECRET_KEY_USER")),
+	}))
+	eJWTUser.GET("/api/v1/donasi", rc.DonasiController.GetAllDonasiController)
+	eJWTUser.GET("/api/v1/donasi/:category", rc.DonasiController.GetDonasiByCategoryController)
+	eJWTUser.GET("/api/v1/donasi/:id", rc.DonasiController.GetDonasiByIdController)
 }

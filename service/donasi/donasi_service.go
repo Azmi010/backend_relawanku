@@ -65,3 +65,19 @@ func (donasiService DonasiService) GetAllDonasi() ([]model.Donasi, error) {
 	}
 	return listDonasi, nil
 }
+
+func (donasiService DonasiService) GetDonasiByCategory(category string) ([]model.Donasi, error) {
+	listDonasi, err := donasiService.donasiRepoInterface.GetDonasiByCategory(category)
+	if err != nil {
+		return []model.Donasi{}, nil
+	}
+	return listDonasi, nil
+}
+
+func (donasiService DonasiService) GetDonasiById(donasiId uint) (model.Donasi, error) {
+	detailDonasi, err := donasiService.donasiRepoInterface.GetDonasiById(donasiId)
+	if err != nil {
+		return model.Donasi{}, nil
+	}
+	return detailDonasi, nil
+}
