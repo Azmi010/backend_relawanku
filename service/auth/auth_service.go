@@ -54,7 +54,7 @@ func (authService AuthService) Login(user model.User, admin model.Admin) (model.
 		}
 
 		if !CheckPasswordHash(admin.Password, storedAdmin.Password) {
-			return model.User{}, "", errors.New("admin invalid credentials")
+			return model.User{}, "", errors.New("invalid credentials")
 		}
 
 		mappedAdmin := model.User{
@@ -73,7 +73,7 @@ func (authService AuthService) Login(user model.User, admin model.Admin) (model.
 	}
 
 	if !CheckPasswordHash(user.Password, storedUser.Password) {
-		return model.User{}, "", errors.New("user invalid credentials")
+		return model.User{}, "", errors.New("invalid credentials")
 	}
 
 	token, err := authService.jwtInterface.GenerateJWT(storedUser.Username, model.UserRole(storedUser.Role))
