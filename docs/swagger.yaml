@@ -1,0 +1,265 @@
+basePath: /api/v1
+definitions:
+  request.CreateArticleRequest:
+    properties:
+      category:
+        type: string
+      content:
+        type: string
+      image_url:
+        type: string
+      title:
+        type: string
+    type: object
+  request.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.UpdateArticleRequest:
+    properties:
+      category:
+        type: string
+      content:
+        type: string
+      image_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  response.ArticleResponse:
+    properties:
+      category:
+        example: Technology
+        type: string
+      content:
+        example: Article Content
+        type: string
+      created_at:
+        example: "2024-12-09T09:00:00Z"
+        type: string
+      deleted_at:
+        example: "2024-12-09T09:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      title:
+        example: Article Title
+        type: string
+      updated_at:
+        example: "2024-12-09T09:00:00Z"
+        type: string
+    type: object
+host: relawanku.xyz
+info:
+  contact: {}
+  description: API untuk aplikasi RelawanKu
+  title: RelawanKu API
+  version: "1.0"
+paths:
+  /api/v1/admin/article:
+    post:
+      consumes:
+      - application/json
+      description: Membuat artikel baru oleh admin
+      parameters:
+      - description: Informasi Artikel
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateArticleRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Buat Artikel Baru
+      tags:
+      - articles
+  /api/v1/admin/article/{id}:
+    delete:
+      description: Menghapus artikel berdasarkan ID
+      parameters:
+      - description: ID Artikel
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Hapus Artikel
+      tags:
+      - articles
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui artikel berdasarkan ID
+      parameters:
+      - description: ID Artikel
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Informasi Artikel yang Diperbarui
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateArticleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update Artikel
+      tags:
+      - articles
+  /api/v1/admin/articles:
+    get:
+      description: Mengambil daftar semua artikel
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ArticleResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Semua Artikel
+      tags:
+      - articles
+  /api/v1/admin/articles/{category}:
+    get:
+      description: Mengambil daftar semua artikel sesuai kategori
+      parameters:
+      - description: Category Article
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ArticleResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Artikel Sesuai Kategori
+      tags:
+      - articles
+  /api/v1/admin/articles/{id}:
+    get:
+      description: Mengambil daftar semua artikel sesuai kategori
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ArticleResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Artikel Sesuai Kategori
+      tags:
+      - articles
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: Proses login pengguna
+      parameters:
+      - description: Informasi Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login Pengguna
+      tags:
+      - auth
+  /api/v1/register:
+    post:
+      consumes:
+      - application/json
+      description: Mendaftarkan pengguna baru
+      parameters:
+      - description: Informasi Registrasi
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Registrasi Pengguna
+      tags:
+      - auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

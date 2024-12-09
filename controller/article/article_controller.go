@@ -21,6 +21,15 @@ type ArticleController struct {
 	articleServiceInterface article.ArticleServiceInterface
 }
 
+// @Summary      Buat Artikel Baru
+// @Description  Membuat artikel baru oleh admin
+// @Tags         articles
+// @Accept       json
+// @Produce      json
+// @Param        article  body      request.CreateArticleRequest  true  "Informasi Artikel"
+// @Success      201      {object}  map[string]interface{}
+// @Router       /api/v1/admin/article [post]
+// @Security     BearerAuth
 func (articleController ArticleController) CreateArticleController(c echo.Context) error {
 	articleCreated := request.CreateArticleRequest{}
 	if err := c.Bind(&articleCreated); err != nil {
@@ -41,6 +50,16 @@ func (articleController ArticleController) CreateArticleController(c echo.Contex
 	return base.SuccessResponse(c, response.CreateArticleFromModel(createdArticle))
 }
 
+// @Summary      Update Artikel
+// @Description  Memperbarui artikel berdasarkan ID
+// @Tags         articles
+// @Accept       json
+// @Produce      json
+// @Param        id       path      uint                   true  "ID Artikel"
+// @Param        article  body      request.UpdateArticleRequest  true  "Informasi Artikel yang Diperbarui"
+// @Success      200      {object}  map[string]interface{}
+// @Router       /api/v1/admin/article/{id} [put]
+// @Security     BearerAuth
 func (articleController ArticleController) UpdateArticleController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -61,6 +80,13 @@ func (articleController ArticleController) UpdateArticleController(c echo.Contex
 	return base.SuccessResponse(c, response.UpdateArticleFromModel(updatedArticle))
 }
 
+// @Summary      Hapus Artikel
+// @Description  Menghapus artikel berdasarkan ID
+// @Tags         articles
+// @Param        id  path      uint  true  "ID Artikel"
+// @Success      200  {object}  map[string]interface{}
+// @Router       /api/v1/admin/article/{id} [delete]
+// @Security     BearerAuth
 func (articleController ArticleController) DeleteArticleController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -76,6 +102,13 @@ func (articleController ArticleController) DeleteArticleController(c echo.Contex
 	return base.SuccessResponse(c, "Article deleted successfully")
 }
 
+// @Summary      Dapatkan Semua Artikel
+// @Description  Mengambil daftar semua artikel
+// @Tags         articles
+// @Produce      json
+// @Success      200  {array}   response.ArticleResponse
+// @Router       /api/v1/admin/articles [get]
+// @Security     BearerAuth
 func (articleController ArticleController) GetAllArticlesController(c echo.Context) error {
 	articles, err := articleController.articleServiceInterface.GetAllArticles()
 	if err != nil {
@@ -84,6 +117,14 @@ func (articleController ArticleController) GetAllArticlesController(c echo.Conte
 	return base.SuccessResponse(c, articles)
 }
 
+// @Summary      Dapatkan Artikel Sesuai Kategori
+// @Description  Mengambil daftar semua artikel sesuai kategori
+// @Tags         articles
+// @Param 		 category path string true "Category Article"
+// @Produce      json
+// @Success      200  {array}   response.ArticleResponse
+// @Router       /api/v1/admin/articles/{category} [get]
+// @Security     BearerAuth
 func (articleController ArticleController) GetArticlesByCategoryController(c echo.Context) error {
 	category := c.QueryParam("category")
 	articles, err := articleController.articleServiceInterface.GetArticlesByCategory(category)
@@ -93,6 +134,15 @@ func (articleController ArticleController) GetArticlesByCategoryController(c ech
 	return base.SuccessResponse(c, articles)
 }
 
+// @Summary      Dapatkan Artikel Sesuai Kategori
+// @Description  Mengambil daftar semua artikel sesuai kategori
+// @Tags         articles
+// @Param 		 id path uint true "Category ID"
+// @Sec
+// @Produce      json
+// @Success      200  {array}   response.ArticleResponse
+// @Router       /api/v1/admin/articles/{id} [get]
+// @Security     BearerAuth
 func (articleController ArticleController) GetArticleByIDController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)

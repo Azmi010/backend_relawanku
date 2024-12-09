@@ -14,14 +14,27 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
+	_ "backend_relawanku/docs"
 )
 
+// @title           RelawanKu API
+// @version         1.0
+// @description     API untuk aplikasi RelawanKu
+// @host            relawanku.xyz
+// @BasePath        /api/v1
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	loadEnv()
 	db, _ := config.ConnectDatabase()
 	config.MigrateDB(db)
 
 	e := echo.New()
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 
 	authRepo := authRepo.NewAuthRepository(db)
