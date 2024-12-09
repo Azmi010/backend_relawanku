@@ -13,12 +13,12 @@ import (
 
 func NewArticleController(as article.ArticleServiceInterface) *ArticleController {
 	return &ArticleController{
-		articleServiceInterface: as,
+		ArticleServiceInterface: as,
 	}
 }
 
 type ArticleController struct {
-	articleServiceInterface article.ArticleServiceInterface
+	ArticleServiceInterface article.ArticleServiceInterface
 }
 
 func (articleController ArticleController) CreateArticleController(c echo.Context) error {
@@ -33,7 +33,7 @@ func (articleController ArticleController) CreateArticleController(c echo.Contex
 	}
 	defer file.Close()
 
-	createdArticle, err := articleController.articleServiceInterface.CreateArticle(articleCreated.CreateArticleToModel(), file, fileHeader)
+	createdArticle, err := articleController.ArticleServiceInterface.CreateArticle(articleCreated.CreateArticleToModel(), file, fileHeader)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -53,7 +53,7 @@ func (articleController ArticleController) UpdateArticleController(c echo.Contex
 		return base.ErrorResponse(c, err)
 	}
 
-	updatedArticle, err := articleController.articleServiceInterface.UpdateArticle(uint(id), updateRequest.UpdateArticleToModel())
+	updatedArticle, err := articleController.ArticleServiceInterface.UpdateArticle(uint(id), updateRequest.UpdateArticleToModel())
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -68,7 +68,7 @@ func (articleController ArticleController) DeleteArticleController(c echo.Contex
 		return base.ErrorResponse(c, errors.New("invalid article ID"))
 	}
 
-	err = articleController.articleServiceInterface.DeleteArticle(uint(id))
+	err = articleController.ArticleServiceInterface.DeleteArticle(uint(id))
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -77,7 +77,7 @@ func (articleController ArticleController) DeleteArticleController(c echo.Contex
 }
 
 func (articleController ArticleController) GetAllArticlesController(c echo.Context) error {
-	articles, err := articleController.articleServiceInterface.GetAllArticles()
+	articles, err := articleController.ArticleServiceInterface.GetAllArticles()
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -86,7 +86,7 @@ func (articleController ArticleController) GetAllArticlesController(c echo.Conte
 
 func (articleController ArticleController) GetArticlesByCategoryController(c echo.Context) error {
 	category := c.QueryParam("category")
-	articles, err := articleController.articleServiceInterface.GetArticlesByCategory(category)
+	articles, err := articleController.ArticleServiceInterface.GetArticlesByCategory(category)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -99,7 +99,7 @@ func (articleController ArticleController) GetArticleByIDController(c echo.Conte
 	if err != nil {
 		return base.ErrorResponse(c, errors.New("invalid article ID"))
 	}
-	article, err := articleController.articleServiceInterface.GetArticleByID(uint(id))
+	article, err := articleController.ArticleServiceInterface.GetArticleByID(uint(id))
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
