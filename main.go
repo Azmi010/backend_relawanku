@@ -11,6 +11,7 @@ import (
 	servicePro "backend_relawanku/service/program" 
 	authController "backend_relawanku/controller/auth"
 	articleController "backend_relawanku/controller/article"
+	dashboardController "backend_relawanku/controller/dashboard"
 
 	"backend_relawanku/middleware"
 
@@ -23,14 +24,27 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
+	_ "backend_relawanku/docs"
 )
 
+// @title           RelawanKu API
+// @version         1.0
+// @description     API untuk aplikasi RelawanKu
+// @host            relawanku.xyz
+// @BasePath        /api/v1
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	loadEnv()
 	db, _ := config.ConnectDatabase()
 	config.MigrateDB(db)
 
 	e := echo.New()
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 
 	// Auth setup
@@ -46,10 +60,13 @@ func main() {
 	programService := servicePro.NewProgramService(programRepo)  
 	programController := controllerPro.NewProgramController(programService)  
 
+	dashboardController := dashboardController.NewDashboardController(articleController, programController)
+
 	routeController := routes.RouteController{
 		AuthController:   authController,
 		ProgramController: programController,  
 		ArticleController: articleController,
+		DashboardController: dashboardController,
 	}
 	routeController.InitRoute(e)
 

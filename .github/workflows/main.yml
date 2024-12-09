@@ -42,13 +42,28 @@ jobs:
     # needs: build-and-push-docker
     runs-on: ubuntu-latest
     env:
-        IMAGE_URI: 'ululazmi01/relawanku:1.0.0'
+        IMAGE_URI: 'ululazmi01/relawanku:${{ github.sha }}'
         EC2_HOST: ${{secrets.EC2_HOST}}
         EC2_USER: ${{secrets.EC2_USER}}
 
     steps:
         - name: Check out the code
           uses: actions/checkout@v2
+
+        - name: Create .env file
+          run: |
+            echo "${{secrets.ENV}}" >> .env
+        - name: Build Docker image
+          run: docker build -t ululazmi01/relawanku:${{ github.sha }} .
+
+        - name: Docker Hub login
+          uses: docker/login-action@v1
+          with:
+            username: ${{ secrets.DOCKER_USER }}
+            password: ${{ secrets.DOCKER_TOKEN }}
+  
+        - name: Push Docker image
+          run: docker push ululazmi01/relawanku:${{ github.sha }}
 
         - name: Create PEM file from secret
           run: |

@@ -1,0 +1,212 @@
+basePath: /api/v1
+definitions:
+  model.Program:
+    type: object
+  request.CreateProgramRequest:
+    properties:
+      category:
+        type: string
+      details:
+        type: string
+      end_date:
+        type: string
+      image_url:
+        type: string
+      location:
+        type: string
+      quota:
+        type: integer
+      start_date:
+        type: string
+      title:
+        type: string
+    type: object
+  response.ProgramResponse:
+    properties:
+      category:
+        type: string
+      details:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      location:
+        type: string
+      title:
+        type: string
+      volunteer_quota:
+        type: integer
+    type: object
+host: relawanku.xyz
+info:
+  contact: {}
+  description: API untuk aplikasi RelawanKu
+  title: RelawanKu API
+  version: "1.0"
+paths:
+  /api/v1/admin/program:
+    post:
+      consumes:
+      - application/json
+      description: Membuat program baru oleh admin
+      parameters:
+      - description: Informasi Program
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateProgramRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Buat Program Baru
+      tags:
+      - programs
+  /api/v1/admin/program/{category}:
+    get:
+      description: Mengambil daftar semua program sesuai kategori
+      parameters:
+      - description: Category Program
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ProgramResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Program Sesuai Kategori
+      tags:
+      - programs
+  /api/v1/admin/program/{id}:
+    delete:
+      description: Menghapus program berdasarkan ID
+      parameters:
+      - description: ID Program
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Hapus Program
+      tags:
+      - programs
+    get:
+      description: Mengambil daftar semua artikel sesuai ID
+      parameters:
+      - description: Program ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ProgramResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Artikel Sesuai ID
+      tags:
+      - programs
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui program berdasarkan ID
+      parameters:
+      - description: ID Program
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Informasi Program yang Diperbarui
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/model.Program'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update Program
+      tags:
+      - programs
+  /api/v1/admin/program/{latest}:
+    get:
+      description: Mengambil daftar semua program kategori
+      parameters:
+      - description: Category Program
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ProgramResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Program Terbaru
+      tags:
+      - programs
+  /api/v1/admin/programs:
+    get:
+      description: Mengambil daftar semua program
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ProgramResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Semua Program
+      tags:
+      - programs
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
