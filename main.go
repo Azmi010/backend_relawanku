@@ -24,6 +24,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	cors "github.com/labstack/echo/v4/middleware"
 
 	echoSwagger "github.com/swaggo/echo-swagger"
 	_ "backend_relawanku/docs"
@@ -44,6 +45,11 @@ func main() {
 	config.MigrateDB(db)
 
 	e := echo.New()
+	e.Use(cors.CORSWithConfig(cors.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAuthorization},
+	}))
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 
