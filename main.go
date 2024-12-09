@@ -80,3 +80,5 @@ func loadEnv() {
 		panic("failed to load env")
 	}
 }
+
+//tes fitur kegiatanku
