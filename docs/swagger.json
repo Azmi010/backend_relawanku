@@ -7,7 +7,6 @@
         "version": "1.0"
     },
     "host": "relawanku.xyz",
-    "basePath": "/api/v1",
     "paths": {
         "/api/v1/admin/article": {
             "post": {

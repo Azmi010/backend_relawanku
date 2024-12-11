@@ -731,7 +731,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "relawanku.xyz",
-	BasePath:         "/api/v1",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "RelawanKu API",
 	Description:      "API untuk aplikasi RelawanKu",
