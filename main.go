@@ -34,7 +34,6 @@ import (
 // @version         1.0
 // @description     API untuk aplikasi RelawanKu
 // @host            relawanku.xyz
-// @BasePath        /api/v1
 
 // @securityDefinitions.apikey BearerAuth
 // @in header
