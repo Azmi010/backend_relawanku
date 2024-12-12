@@ -8,18 +8,19 @@ import (
 )
 
 type Donasi struct {
-	ID             uint           `gorm:"primaryKey"`
-	Title          string         `gorm:"not null" json:"title" form:"title"`
-	Description    string         `gorm:"not null" json:"description" form:"description"`
-	News           string         `gorm:"not null" json:"news" form:"news"`
-	TargetDonation float64        `gorm:"not null" json:"target_donation" form:"target_donation"`
-	Category       string         `gorm:"not null" json:"category" form:"category"`
-	ImageUrl       string         `gorm:"not null" json:"image_url" form:"image_url"`
-	StartedAt      string         `gorm:"not null" json:"started_at" form:"started_at"`
-	FinishedAt     string         `gorm:"not null" json:"finished_at" form:"finished_at"`
-	CreatedAt      time.Time      `json:"created_at"`
-	UpdatedAt      time.Time      `json:"updated_at"`
-	DeletedAt      gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
+	ID             uint                `gorm:"primaryKey"`
+	Title          string              `gorm:"not null" json:"title" form:"title"`
+	Description    string              `gorm:"not null" json:"description" form:"description"`
+	News           string              `gorm:"not null" json:"news" form:"news"`
+	TargetDonation float64             `gorm:"not null" json:"target_donation" form:"target_donation"`
+	Category       string              `gorm:"not null" json:"category" form:"category"`
+	ImageUrl       string              `gorm:"not null" json:"image_url" form:"image_url"`
+	StartedAt      string              `gorm:"not null" json:"started_at" form:"started_at"`
+	FinishedAt     string              `gorm:"not null" json:"finished_at" form:"finished_at"`
+	CreatedAt      time.Time           `json:"created_at"`
+	UpdatedAt      time.Time           `json:"updated_at"`
+	DeletedAt      gorm.DeletedAt      `gorm:"index" json:"deleted_at,omitempty"`
+	Transactions   []model.Transaction `gorm:"foreignKey:DonasiID" json:"donasi_id"`
 }
 
 func FromModelDonasi(donasi model.Donasi) Donasi {
