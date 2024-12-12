@@ -19,7 +19,6 @@ type User struct {
 	Username  string         `gorm:"unique;not null" json:"username" form:"username"`
 	Email     string         `gorm:"email;not null" json:"email" form:"email"`
 	Password  string         `gorm:"not null" json:"password" form:"password"`
-	Role      UserRole       `gorm:"not null" json:"role"`
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
@@ -31,7 +30,6 @@ func FromModelUser(user model.User) User {
 		Username:  user.Username,
 		Email:     user.Email,
 		Password:  user.Password,
-		Role:      UserRole(user.Role),
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 		DeletedAt: user.DeletedAt,
@@ -49,6 +47,5 @@ func (user User) ToModelUser() model.User {
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
-		Role:     string(user.Role),
 	}
 }
