@@ -53,6 +53,7 @@ jobs:
         - name: Create .env file
           run: |
             echo "${{secrets.ENV}}" >> .env
+            echo "FIREBASE_SERVICE_ACCOUNT_KEY=${{secrets.FIREBASE_SERVICE_ACCOUNT_KEY}}" >> .env
         - name: Build Docker image
           run: docker build -t ululazmi01/relawanku:${{ github.sha }} .
 
