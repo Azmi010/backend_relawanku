@@ -7,7 +7,7 @@ import (
 
 type ArticleServiceInterface interface {
 	CreateArticle(article model.Article, file multipart.File, fileHeader *multipart.FileHeader) (model.Article, error)
-	UpdateArticle(articleId uint, article model.Article) (model.Article, error)
+	UpdateArticle(articleId uint, article model.Article, file multipart.File, fileHeader *multipart.FileHeader) (model.Article, error)
 	DeleteArticle(articleId uint) error
 	GetAllArticles() ([]model.Article, error)
 	GetArticlesByCategory(category string) ([]model.Article, error)
