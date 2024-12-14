@@ -3,37 +3,42 @@ package main
 import (
 	"backend_relawanku/config"
 
-	controllerPro "backend_relawanku/controller/program" 
-	repoPro "backend_relawanku/repository/program" 
+	controllerPro "backend_relawanku/controller/program"
+	repoPro "backend_relawanku/repository/program"
 
 	"backend_relawanku/routes"
 
-	servicePro "backend_relawanku/service/program" 
-	authController "backend_relawanku/controller/auth"
 	articleController "backend_relawanku/controller/article"
+	authController "backend_relawanku/controller/auth"
 	dashboardController "backend_relawanku/controller/dashboard"
+	servicePro "backend_relawanku/service/program"
 
 	"backend_relawanku/middleware"
 
-	authRepo "backend_relawanku/repository/auth"
 	articleRepo "backend_relawanku/repository/article"
-	authService "backend_relawanku/service/auth"
+	authRepo "backend_relawanku/repository/auth"
 	articleService "backend_relawanku/service/article"
-	
+	authService "backend_relawanku/service/auth"
+
+	registController "backend_relawanku/controller/registration"
+	registRepo "backend_relawanku/repository/registration"
+	registService "backend_relawanku/service/registration"
+
 	"log"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	cors "github.com/labstack/echo/v4/middleware"
+
+	_ "backend_relawanku/docs"
 
 	echoSwagger "github.com/swaggo/echo-swagger"
-	_ "backend_relawanku/docs"
 )
 
 // @title           RelawanKu API
 // @version         1.0
 // @description     API untuk aplikasi RelawanKu
 // @host            relawanku.xyz
-// @BasePath        /api/v1
 
 // @securityDefinitions.apikey BearerAuth
 // @in header
@@ -44,6 +49,11 @@ func main() {
 	config.MigrateDB(db)
 
 	e := echo.New()
+	e.Use(cors.CORSWithConfig(cors.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAuthorization},
+	}))
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 
@@ -62,11 +72,16 @@ func main() {
 
 	dashboardController := dashboardController.NewDashboardController(articleController, programController)
 
+	registrationRepo := registRepo.NewUserProgramRepository(db)
+	registrationService := registService.NewUserProgramService(registrationRepo)
+	registrationController := registController.NewUserProgramController(registrationService)
+
 	routeController := routes.RouteController{
 		AuthController:   authController,
 		ProgramController: programController,  
 		ArticleController: articleController,
 		DashboardController: dashboardController,
+		RegisterController:  registrationController,
 	}
 	routeController.InitRoute(e)
 
@@ -80,5 +95,3 @@ func loadEnv() {
 		panic("failed to load env")
 	}
 }
-
-//tes fitur kegiatanku

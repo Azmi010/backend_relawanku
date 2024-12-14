@@ -72,16 +72,23 @@ func (authService AuthService) Login(user model.User, admin model.Admin) (model.
 		return mappedAdmin, token, nil
 	}
 
+	mappedUser := model.User{
+		Model:    storedUser.Model,
+		Username: storedUser.Username,
+		Email:    storedUser.Email,
+		Role:     string(model.RoleUser),
+	}
+
 	if !CheckPasswordHash(user.Password, storedUser.Password) {
 		return model.User{}, "", errors.New("invalid credentials")
 	}
 
-	token, err := authService.jwtInterface.GenerateJWT(storedUser.Username, model.UserRole(storedUser.Role))
+	token, err := authService.jwtInterface.GenerateJWT(storedUser.Username, model.RoleUser)
 	if err != nil {
 		return model.User{}, "", err
 	}
 
-	return storedUser, token, nil
+	return mappedUser, token, nil
 }
 
 func HashPassword(password string) (string, error) {
