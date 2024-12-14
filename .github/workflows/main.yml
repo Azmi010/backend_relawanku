@@ -55,7 +55,7 @@ jobs:
             echo "${{secrets.ENV}}" >> .env
         - name: Create serviceAccountKey file
           run: |
-            echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" >> serviceAccountKey.json
+            echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" | base64 -d > serviceAccountKey.json
         - name: Build Docker image
           run: docker build -t ululazmi01/relawanku:${{ github.sha }} .
 
