@@ -17,7 +17,7 @@ import (
 func UploadImageToFirebase(bucketName, folderPath, fileName string, file io.Reader) (string, error) {
 	ctx := context.Background()
 
-	client, err := storage.NewClient(ctx, option.WithCredentialsFile((os.Getenv("FIREBASE_SERVICE_ACCOUNT_KEY"))))
+	client, err := storage.NewClient(ctx, option.WithCredentialsFile(os.Getenv("FIREBASE_SERVICE_ACCOUNT_KEY")))
 	if err != nil {
 		return "", fmt.Errorf("failed to create Firebase storage client: %w", err)
 	}

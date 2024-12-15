@@ -18,4 +18,5 @@ type User struct {
 	Gender    string
 	Address   string
 	ImageUrl string
+	Transactions []Transaction
 }

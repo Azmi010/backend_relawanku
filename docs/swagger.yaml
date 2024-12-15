@@ -31,6 +31,25 @@ definitions:
       title:
         type: string
     type: object
+  request.DonasiRequest:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      finished_at:
+        type: string
+      image_url:
+        type: string
+      news:
+        type: string
+      started_at:
+        type: string
+      target_donation:
+        type: number
+      title:
+        type: string
+    type: object
   request.LoginRequest:
     properties:
       password:
@@ -285,6 +304,144 @@ paths:
       summary: Dapatkan Artikel Sesuai ID
       tags:
       - articles
+  /api/v1/admin/donasi:
+    get:
+      description: Mengambil daftar semua donasi
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Semua Donasi
+      tags:
+      - donasi
+    post:
+      consumes:
+      - application/json
+      description: Membuat donasi baru oleh admin
+      parameters:
+      - description: Informasi Donasi
+        in: body
+        name: donasi
+        required: true
+        schema:
+          $ref: '#/definitions/request.DonasiRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Buat Donasi Baru
+      tags:
+      - donasi
+  /api/v1/admin/donasi/{category}:
+    get:
+      description: Mengambil daftar semua donasi sesuai kategori
+      parameters:
+      - description: Category Donasi
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Donasi Sesuai Kategori
+      tags:
+      - donasi
+  /api/v1/admin/donasi/{id}:
+    delete:
+      description: Menghapus donasi berdasarkan ID
+      parameters:
+      - description: ID Donasi
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Hapus Donasi
+      tags:
+      - donasi
+    get:
+      description: Mengambil daftar semua donasi sesuai ID
+      parameters:
+      - description: Donasi ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Donasi Sesuai ID
+      tags:
+      - donasi
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui donasi berdasarkan ID
+      parameters:
+      - description: ID Donasi
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Informasi Donasi yang Diperbarui
+        in: body
+        name: donasi
+        required: true
+        schema:
+          $ref: '#/definitions/request.DonasiRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update Donasi
+      tags:
+      - donasi
   /api/v1/admin/program:
     post:
       consumes:
