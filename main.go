@@ -23,6 +23,10 @@ import (
 	articleService "backend_relawanku/service/article"
 	authService "backend_relawanku/service/auth"
 
+	registController "backend_relawanku/controller/registration"
+	registRepo "backend_relawanku/repository/registration"
+	registService "backend_relawanku/service/registration"
+
 	"log"
 
 	"github.com/joho/godotenv"
@@ -71,6 +75,9 @@ func main() {
 
 	dashboardController := dashboardController.NewDashboardController(articleController, programController)
 
+	registrationRepo := registRepo.NewUserProgramRepository(db)
+	registrationService := registService.NewUserProgramService(registrationRepo)
+	registrationController := registController.NewUserProgramController(registrationService)
 	userRepo := userRepo.NewUserRepository(db)
 	userService := userService.NewUserService(userRepo)
 	userController := userController.NewUserController(userService)
@@ -80,6 +87,7 @@ func main() {
 		ProgramController: programController,  
 		ArticleController: articleController,
 		DashboardController: dashboardController,
+		RegisterController:  registrationController,
 		UserController: userController,
 	}
 	routeController.InitRoute(e)

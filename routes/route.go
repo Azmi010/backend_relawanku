@@ -5,6 +5,7 @@ import (
 	"backend_relawanku/controller/auth"
 	"backend_relawanku/controller/dashboard"
 	"backend_relawanku/controller/program"
+	"backend_relawanku/controller/registration"
 	"backend_relawanku/controller/user"
 	"os"
 
@@ -18,6 +19,7 @@ type RouteController struct {
 	ProgramController *program.ProgramController
 	ArticleController *article.ArticleController
 	DashboardController *dashboard.DashboardController
+	RegisterController *registration.UserProgramController
 	UserController *user.UserController
 }
 
@@ -53,6 +55,8 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTUser.GET("/program/:id", rc.ProgramController.GetProgramByID)
 	eJWTUser.GET("/program/category/:category", rc.ProgramController.GetProgramsByCategory) 
 	eJWTUser.GET("/program/latest", rc.ProgramController.GetLatestProgram)
+	eJWTUser.POST("/register-program", rc.RegisterController.RegisterProgram)
+	eJWTUser.GET("/my-program/:id", rc.RegisterController.GetUserPrograms)
 
 	//beranda user
 	eJWTUser.GET("/homePage", rc.ArticleController.GetAllArticlesController)
