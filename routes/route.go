@@ -6,6 +6,7 @@ import (
 	"backend_relawanku/controller/dashboard"
 	"backend_relawanku/controller/program"
 	"backend_relawanku/controller/registration"
+	"backend_relawanku/controller/user"
 	"os"
 
 	echojwt "github.com/labstack/echo-jwt"
@@ -19,6 +20,7 @@ type RouteController struct {
 	ArticleController *article.ArticleController
 	DashboardController *dashboard.DashboardController
 	RegisterController *registration.UserProgramController
+	UserController *user.UserController
 }
 
 func (rc RouteController) InitRoute(e *echo.Echo) {
@@ -60,4 +62,8 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTUser.GET("/homePage", rc.ArticleController.GetAllArticlesController)
 	eJWTUser.GET("/homePage/:id", rc.ArticleController.GetArticleByIDController)
 
+	// profile user
+	eJWTUser.GET("/profile/:id", rc.UserController.GetUserByIDController)
+	eJWTUser.PUT("/profile/:id", rc.UserController.UpdateUserController)
+	eJWTUser.PUT("/profile/:id", rc.UserController.UpdatePasswordController)
 }

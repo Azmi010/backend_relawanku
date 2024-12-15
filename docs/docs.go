@@ -15,6 +15,225 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/admin/article": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Membuat artikel baru oleh admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Buat Artikel Baru",
+                "parameters": [
+                    {
+                        "description": "Informasi Artikel",
+                        "name": "article",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateArticleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/article/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Memperbarui artikel berdasarkan ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Update Artikel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID Artikel",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Informasi Artikel yang Diperbarui",
+                        "name": "article",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateArticleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Menghapus artikel berdasarkan ID",
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Hapus Artikel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID Artikel",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/articles": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil daftar semua artikel",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Dapatkan Semua Artikel",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.ArticleResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/articles/{category}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil daftar semua artikel sesuai kategori",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Dapatkan Artikel Sesuai Kategori",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category Article",
+                        "name": "category",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.ArticleResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/articles/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil daftar semua artikel sesuai kategori",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Dapatkan Artikel Sesuai ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.ArticleResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/admin/program": {
             "post": {
                 "security": [
@@ -268,227 +487,6 @@ const docTemplate = `{
                     }
                 }
             }
-        }
-    }, 
-    {
-        "/api/v1/admin/article": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Membuat artikel baru oleh admin",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Buat Artikel Baru",
-                "parameters": [
-                    {
-                        "description": "Informasi Artikel",
-                        "name": "article",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.CreateArticleRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/article/{id}": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Memperbarui artikel berdasarkan ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Update Artikel",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID Artikel",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Informasi Artikel yang Diperbarui",
-                        "name": "article",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.UpdateArticleRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Menghapus artikel berdasarkan ID",
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Hapus Artikel",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID Artikel",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/articles": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Mengambil daftar semua artikel",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Dapatkan Semua Artikel",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/response.ArticleResponse"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/articles/{category}": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Mengambil daftar semua artikel sesuai kategori",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Dapatkan Artikel Sesuai Kategori",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Category Article",
-                        "name": "category",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/response.ArticleResponse"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/articles/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Mengambil daftar semua artikel sesuai kategori",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Dapatkan Artikel Sesuai Kategori",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Category ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/response.ArticleResponse"
-                            }
-                        }
-                    }
-                }
-            }
         },
         "/api/v1/login": {
             "post": {
@@ -559,11 +557,124 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user/profile/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil data user sesuai ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profiles"
+                ],
+                "summary": "Dapatkan User Sesuai ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.UserResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Memperbarui profile berdasarkan ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profiles"
+                ],
+                "summary": "Update Profile",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Old Password",
+                        "name": "oldPassword",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "New Password",
+                        "name": "newPassword",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Informasi Profile yang Diperbarui",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdatePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "model.Program": {
             "type": "object"
+        },
+        "request.CreateArticleRequest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
         },
         "request.CreateProgramRequest": {
             "type": "object",
@@ -587,51 +698,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "start_date": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.ProgramResponse": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "type": "string"
-                },
-                "details": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "image_url": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "volunteer_quota": {
-                    "type": "integer"
-                }
-            }
-        }
-    },
-    "definitions": {
-        "request.CreateArticleRequest": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "type": "string"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "image_url": {
                     "type": "string"
                 },
                 "title": {
@@ -684,6 +750,34 @@ const docTemplate = `{
                 }
             }
         },
+        "request.UpdatePasswordRequest": {
+            "type": "object",
+            "properties": {
+                "new_password": {
+                    "type": "string"
+                },
+                "old_password": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UserRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "response.ArticleResponse": {
             "type": "object",
             "properties": {
@@ -720,6 +814,61 @@ const docTemplate = `{
                     "example": "2024-12-09T09:00:00Z"
                 }
             }
+        },
+        "response.ProgramResponse": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "volunteer_quota": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.UserResponse": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -735,7 +884,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "relawanku.xyz",
-	BasePath:         "/api/v1",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "RelawanKu API",
 	Description:      "API untuk aplikasi RelawanKu",

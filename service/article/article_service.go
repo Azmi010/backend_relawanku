@@ -34,7 +34,15 @@ func (articleService ArticleService) CreateArticle(article model.Article, file m
 	return createdArticle, nil
 }
 
-func (articleService ArticleService) UpdateArticle(id uint, article model.Article) (model.Article, error) {
+func (articleService ArticleService) UpdateArticle(id uint, article model.Article, file multipart.File, fileHeader *multipart.FileHeader) (model.Article, error) {
+	if file != nil && fileHeader != nil {
+		imageURL, err := helper.UploadImageToFirebase("my-chatapp-01.appspot.com", "articles", fileHeader.Filename, file)
+		if err != nil {
+			return model.Article{}, errors.New("failed to upload image to Firebase")
+		}
+		article.ImageUrl = imageURL
+	}
+
 	updated, err := articleService.articleRepoInterface.UpdateArticle(id, article)
 	if err != nil {
 		return model.Article{}, errors.New("failed to update article")

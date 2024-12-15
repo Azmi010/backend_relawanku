@@ -11,8 +11,11 @@ const (
 
 type User struct {
 	gorm.Model
-	Username string
-	Email    string
-	Password string
-	Role     string
+	Username  string
+	Email     string
+	Password  string
+	Role      string
+	Gender    string
+	Address   string
+	ImageUrl string
 }

@@ -11,10 +11,7 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY .env .env
+COPY serviceAccountKey.json serviceAccountKey.json
 RUN apk update && apk add --no-cache ca-certificates
 EXPOSE 8000
 CMD ["./main"]
-
-
-
-

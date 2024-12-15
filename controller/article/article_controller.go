@@ -72,7 +72,13 @@ func (articleController ArticleController) UpdateArticleController(c echo.Contex
 		return base.ErrorResponse(c, err)
 	}
 
-	updatedArticle, err := articleController.ArticleServiceInterface.UpdateArticle(uint(id), updateRequest.UpdateArticleToModel())
+	file, fileHeader, err := c.Request().FormFile("image_url")
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("failed to read image file"))
+	}
+	defer file.Close()
+
+	updatedArticle, err := articleController.ArticleServiceInterface.UpdateArticle(uint(id), updateRequest.UpdateArticleToModel(), file, fileHeader)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -134,7 +140,7 @@ func (articleController ArticleController) GetArticlesByCategoryController(c ech
 	return base.SuccessResponse(c, articles)
 }
 
-// @Summary      Dapatkan Artikel Sesuai Kategori
+// @Summary      Dapatkan Artikel Sesuai ID
 // @Description  Mengambil daftar semua artikel sesuai kategori
 // @Tags         articles
 // @Param 		 id path uint true "Category ID"
