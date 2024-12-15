@@ -197,43 +197,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/admin/articles/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Mengambil daftar semua artikel sesuai kategori",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Dapatkan Artikel Sesuai ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Category ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/response.ArticleResponse"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/admin/donasi": {
             "get": {
                 "security": [
@@ -776,6 +739,118 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/user/article-trending": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil daftar semua artikel urut sesuai trending",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Dapatkan Artikel Trending",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Trending Article",
+                        "name": "category",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.ArticleResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/articles/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil daftar semua artikel sesuai ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Dapatkan Artikel Sesuai ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.ArticleResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/my-program/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mengambil data program yang diikuti sesuai User ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "programs"
+                ],
+                "summary": "Dapatkan Program Sesuai User ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/profile/{id}": {
             "get": {
                 "security": [
@@ -838,20 +913,6 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "Old Password",
-                        "name": "oldPassword",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "New Password",
-                        "name": "newPassword",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "Informasi Profile yang Diperbarui",
                         "name": "user",
                         "in": "body",
@@ -864,6 +925,46 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/register-program": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mendaftar Pada Sebuah Program",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "programs"
+                ],
+                "summary": "Daftar Program",
+                "parameters": [
+                    {
+                        "description": "Daftar Program",
+                        "name": "program",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterProgramRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
@@ -959,6 +1060,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RegisterProgramRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "motivation": {
+                    "type": "string"
+                },
+                "nama_program": {
+                    "type": "string"
+                },
+                "phone_number": {
                     "type": "string"
                 }
             }
@@ -1059,6 +1180,10 @@ const docTemplate = `{
                 "updated_at": {
                     "type": "string",
                     "example": "2024-12-09T09:00:00Z"
+                },
+                "view": {
+                    "type": "integer",
+                    "example": 100
                 }
             }
         },
