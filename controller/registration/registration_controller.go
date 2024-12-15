@@ -5,7 +5,7 @@ import (
 	"backend_relawanku/controller/registration/request"
 	"backend_relawanku/controller/registration/response"
 	"backend_relawanku/service/registration"
-	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -34,19 +34,17 @@ func (ctrl *UserProgramController) RegisterProgram(c echo.Context) error {
 }
 
 func (ctrl *UserProgramController) GetUserPrograms(c echo.Context) error {
-    // Mengambil userID dari context
-    userID, ok := c.Get("userID").(uint)
-    if !ok {
-        return echo.NewHTTPError(http.StatusUnauthorized, "User not authenticated")
-    }
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
 
-    programs, err := ctrl.service.GetUserPrograms(userID)
-    if err != nil {
-        return base.ErrorResponse(c, err)
-    }
+	programs, err := ctrl.service.GetUserPrograms(uint(id))
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
 
-    return base.SuccessResponse(c, programs)
+	return base.SuccessResponse(c, programs)
 }
+
 
 
 

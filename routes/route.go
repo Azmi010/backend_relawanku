@@ -54,7 +54,7 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTUser.GET("/program/category/:category", rc.ProgramController.GetProgramsByCategory) 
 	eJWTUser.GET("/program/latest", rc.ProgramController.GetLatestProgram)
 	eJWTUser.POST("/register-program", rc.RegisterController.RegisterProgram)
-	eJWTUser.GET("/my-programs", rc.RegisterController.GetUserPrograms)
+	eJWTUser.GET("/my-program/:id", rc.RegisterController.GetUserPrograms)
 
 	//beranda user
 	eJWTUser.GET("/homePage", rc.ArticleController.GetAllArticlesController)
