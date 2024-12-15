@@ -28,6 +28,10 @@ import (
 	"backend_relawanku/routes"
 	donasiService "backend_relawanku/service/donasi"
 	transactionService "backend_relawanku/service/transaction"
+	registController "backend_relawanku/controller/registration"
+	registRepo "backend_relawanku/repository/registration"
+	registService "backend_relawanku/service/registration"
+
 	"log"
 	"os"
 
@@ -83,6 +87,9 @@ func main() {
 
 	dashboardController := dashboardController.NewDashboardController(articleController, programController)
 
+	registrationRepo := registRepo.NewUserProgramRepository(db)
+	registrationService := registService.NewUserProgramService(registrationRepo)
+	registrationController := registController.NewUserProgramController(registrationService)
 	userRepo := userRepo.NewUserRepository(db)
 	userService := userService.NewUserService(userRepo)
 	userController := userController.NewUserController(userService)
@@ -102,6 +109,7 @@ func main() {
 		DashboardController: dashboardController,
 		DonasiController:      donasiController,
 		TransactionController: transactionController,
+		RegisterController:  registrationController,
 		UserController: userController,
 	}
 	routeController.InitRoute(e)
