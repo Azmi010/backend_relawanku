@@ -3,31 +3,35 @@ package main
 import (
 	"backend_relawanku/config"
 
-	controllerPro "backend_relawanku/controller/program" 
-	repoPro "backend_relawanku/repository/program" 
+	controllerPro "backend_relawanku/controller/program"
+	repoPro "backend_relawanku/repository/program"
+	userRepo "backend_relawanku/repository/user"
 
 	"backend_relawanku/routes"
 
-	servicePro "backend_relawanku/service/program" 
-	authController "backend_relawanku/controller/auth"
 	articleController "backend_relawanku/controller/article"
+	authController "backend_relawanku/controller/auth"
 	dashboardController "backend_relawanku/controller/dashboard"
+	userController "backend_relawanku/controller/user"
+	servicePro "backend_relawanku/service/program"
+	userService "backend_relawanku/service/user"
 
 	"backend_relawanku/middleware"
 
-	authRepo "backend_relawanku/repository/auth"
 	articleRepo "backend_relawanku/repository/article"
-	authService "backend_relawanku/service/auth"
+	authRepo "backend_relawanku/repository/auth"
 	articleService "backend_relawanku/service/article"
-	
+	authService "backend_relawanku/service/auth"
+
 	"log"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	cors "github.com/labstack/echo/v4/middleware"
 
-	echoSwagger "github.com/swaggo/echo-swagger"
 	_ "backend_relawanku/docs"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 // @title           RelawanKu API
@@ -67,11 +71,16 @@ func main() {
 
 	dashboardController := dashboardController.NewDashboardController(articleController, programController)
 
+	userRepo := userRepo.NewUserRepository(db)
+	userService := userService.NewUserService(userRepo)
+	userController := userController.NewUserController(userService)
+
 	routeController := routes.RouteController{
 		AuthController:   authController,
 		ProgramController: programController,  
 		ArticleController: articleController,
 		DashboardController: dashboardController,
+		UserController: userController,
 	}
 	routeController.InitRoute(e)
 
