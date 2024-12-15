@@ -161,3 +161,11 @@ func (articleController ArticleController) GetArticleByIDController(c echo.Conte
 	}
 	return base.SuccessResponse(c, article)
 }
+
+func (articleController ArticleController) GetTrendingArticlesController(c echo.Context) error {
+	articles, err := articleController.ArticleServiceInterface.GetTrendingArticles()
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+	return base.SuccessResponse(c, articles)
+}

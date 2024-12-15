@@ -67,5 +67,18 @@ func (articleService ArticleService) GetArticlesByCategory(category string) ([]m
 }
 
 func (articleService ArticleService) GetArticleByID(id uint) (model.Article, error) {
-	return articleService.articleRepoInterface.GetArticleByID(id)
+	if err := articleService.articleRepoInterface.IncrementArticleView(id); err != nil {
+		return model.Article{}, errors.New("failed to increment view count")
+	}
+	
+	article, err := articleService.articleRepoInterface.GetArticleByID(id)
+	if err != nil {
+		return model.Article{}, errors.New("article not found")
+	}
+
+	return article, nil
+}
+
+func (articleService ArticleService) GetTrendingArticles() ([]model.Article, error) {
+	return articleService.articleRepoInterface.GetTrendingArticles()
 }
