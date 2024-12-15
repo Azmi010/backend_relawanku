@@ -21,6 +21,15 @@ type UserController struct {
 	userServiceInterfae user.UserServiceInterface
 }
 
+// @Summary      Dapatkan User Sesuai ID
+// @Description  Mengambil data user sesuai ID
+// @Tags         profiles
+// @Param 		 id path uint true "User ID"
+// @Sec
+// @Produce      json
+// @Success      200  {array}   response.UserResponse
+// @Router       /api/v1/user/profile/{id} [get]
+// @Security     BearerAuth
 func (userController UserController) GetUserByIDController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -35,6 +44,16 @@ func (userController UserController) GetUserByIDController(c echo.Context) error
 	return base.SuccessResponse(c, response.UserFromModel(donasi))
 }
 
+// @Summary      Update Profile
+// @Description  Memperbarui profile berdasarkan ID
+// @Tags         profiles
+// @Accept       json
+// @Produce      json
+// @Param        id       path      uint                   true  "ID User"
+// @Param        user  body      request.UserRequest  true  "Informasi Profile yang Diperbarui"
+// @Success      200      {object}  map[string]interface{}
+// @Router       /api/v1/user/profile/{id} [put]
+// @Security     BearerAuth
 func (userController UserController) UpdateUserController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -61,6 +80,18 @@ func (userController UserController) UpdateUserController(c echo.Context) error 
 	return base.SuccessResponse(c, response.UserFromModel(updatedUser))
 }
 
+// @Summary      Update Profile
+// @Description  Memperbarui profile berdasarkan ID
+// @Tags         profiles
+// @Accept       json
+// @Produce      json
+// @Param        id       path      uint                   true  "ID User"
+// @Param        oldPassword       path      string                   true  "Old Password"
+// @Param        newPassword       path      string                   true  "New Password"
+// @Param        user  body      request.UpdatePasswordRequest  true  "Informasi Profile yang Diperbarui"
+// @Success      200      {object}  map[string]interface{}
+// @Router       /api/v1/user/profile/{id} [put]
+// @Security     BearerAuth
 func (userController UserController) UpdatePasswordController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)

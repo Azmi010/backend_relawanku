@@ -140,7 +140,7 @@ func (articleController ArticleController) GetArticlesByCategoryController(c ech
 	return base.SuccessResponse(c, articles)
 }
 
-// @Summary      Dapatkan Artikel Sesuai Kategori
+// @Summary      Dapatkan Artikel Sesuai ID
 // @Description  Mengambil daftar semua artikel sesuai kategori
 // @Tags         articles
 // @Param 		 id path uint true "Category ID"

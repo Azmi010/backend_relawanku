@@ -60,6 +60,24 @@ definitions:
       updated_at:
         type: string
     type: object
+  request.UpdatePasswordRequest:
+    properties:
+      new_password:
+        type: string
+      old_password:
+        type: string
+    type: object
+  request.UserRequest:
+    properties:
+      address:
+        type: string
+      gender:
+        type: string
+      image_url:
+        type: string
+      username:
+        type: string
+    type: object
   response.ArticleResponse:
     properties:
       category:
@@ -103,6 +121,25 @@ definitions:
         type: string
       volunteer_quota:
         type: integer
+    type: object
+  response.UserResponse:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
     type: object
 host: relawanku.xyz
 info:
@@ -245,7 +282,7 @@ paths:
             type: array
       security:
       - BearerAuth: []
-      summary: Dapatkan Artikel Sesuai Kategori
+      summary: Dapatkan Artikel Sesuai ID
       tags:
       - articles
   /api/v1/admin/program:
@@ -453,6 +490,68 @@ paths:
       summary: Registrasi Pengguna
       tags:
       - auth
+  /api/v1/user/profile/{id}:
+    get:
+      description: Mengambil data user sesuai ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.UserResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan User Sesuai ID
+      tags:
+      - profiles
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui profile berdasarkan ID
+      parameters:
+      - description: ID User
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Old Password
+        in: path
+        name: oldPassword
+        required: true
+        type: string
+      - description: New Password
+        in: path
+        name: newPassword
+        required: true
+        type: string
+      - description: Informasi Profile yang Diperbarui
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdatePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update Profile
+      tags:
+      - profiles
 securityDefinitions:
   BearerAuth:
     in: header
