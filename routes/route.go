@@ -60,6 +60,7 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTUser.GET("/articles", rc.ArticleController.GetAllArticlesController)
 	eJWTUser.GET("/articles/category", rc.ArticleController.GetArticlesByCategoryController)
 	eJWTUser.GET("/articles/:id", rc.ArticleController.GetArticleByIDController)
+	eJWTUser.GET("/article-trending", rc.ArticleController.GetTrendingArticlesController)
 	eJWTUser.GET("/programs", rc.ProgramController.GetAllPrograms)
 	eJWTUser.GET("/program/:id", rc.ProgramController.GetProgramByID)
 	eJWTUser.GET("/program/category/:category", rc.ProgramController.GetProgramsByCategory) 

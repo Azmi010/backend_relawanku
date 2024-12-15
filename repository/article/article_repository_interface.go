@@ -9,4 +9,6 @@ type ArticleRepository interface {
 	GetAllArticles() ([]model.Article, error)
 	GetArticlesByCategory(category string) ([]model.Article, error)
 	GetArticleByID(id uint) (model.Article, error)
+	GetTrendingArticles() ([]model.Article, error)
+	IncrementArticleView(articleID uint) error
 }

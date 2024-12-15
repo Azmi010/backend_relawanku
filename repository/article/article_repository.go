@@ -94,3 +94,23 @@ func (articleRepo ArticleRepo) GetArticleByID(id uint) (model.Article, error) {
 	}
 	return article.ToModelArticle(), nil
 }
+
+func (articleRepo ArticleRepo) GetTrendingArticles() ([]model.Article, error) {
+	var articles []Article
+	result := articleRepo.db.Order("view DESC").Find(&articles)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	var modelArticles []model.Article
+	for _, a := range articles {
+		modelArticles = append(modelArticles, a.ToModelArticle())
+	}
+	return modelArticles, nil
+}
+
+func (articleRepo ArticleRepo) IncrementArticleView(id uint) error {
+	return articleRepo.db.Model(&model.Article{}).
+		Where("id = ?", id).
+		UpdateColumn("view", gorm.Expr("view + 1")).Error
+}

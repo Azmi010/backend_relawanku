@@ -57,6 +57,19 @@ definitions:
       username:
         type: string
     type: object
+  request.RegisterProgramRequest:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      motivation:
+        type: string
+      nama_program:
+        type: string
+      phone_number:
+        type: string
+    type: object
   request.RegisterRequest:
     properties:
       email:
@@ -123,6 +136,9 @@ definitions:
       updated_at:
         example: "2024-12-09T09:00:00Z"
         type: string
+      view:
+        example: 100
+        type: integer
     type: object
   response.ProgramResponse:
     properties:
@@ -279,29 +295,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Dapatkan Artikel Sesuai Kategori
-      tags:
-      - articles
-  /api/v1/admin/articles/{id}:
-    get:
-      description: Mengambil daftar semua artikel sesuai kategori
-      parameters:
-      - description: Category ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/response.ArticleResponse'
-            type: array
-      security:
-      - BearerAuth: []
-      summary: Dapatkan Artikel Sesuai ID
       tags:
       - articles
   /api/v1/admin/donasi:
@@ -647,6 +640,76 @@ paths:
       summary: Registrasi Pengguna
       tags:
       - auth
+  /api/v1/user/article-trending:
+    get:
+      description: Mengambil daftar semua artikel urut sesuai trending
+      parameters:
+      - description: Trending Article
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ArticleResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Artikel Trending
+      tags:
+      - articles
+  /api/v1/user/articles/{id}:
+    get:
+      description: Mengambil daftar semua artikel sesuai ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.ArticleResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Artikel Sesuai ID
+      tags:
+      - articles
+  /api/v1/user/my-program/{id}:
+    get:
+      description: Mengambil data program yang diikuti sesuai User ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Dapatkan Program Sesuai User ID
+      tags:
+      - programs
   /api/v1/user/profile/{id}:
     get:
       description: Mengambil data user sesuai ID
@@ -680,16 +743,6 @@ paths:
         name: id
         required: true
         type: integer
-      - description: Old Password
-        in: path
-        name: oldPassword
-        required: true
-        type: string
-      - description: New Password
-        in: path
-        name: newPassword
-        required: true
-        type: string
       - description: Informasi Profile yang Diperbarui
         in: body
         name: user
@@ -709,6 +762,31 @@ paths:
       summary: Update Profile
       tags:
       - profiles
+  /api/v1/user/register-program:
+    post:
+      consumes:
+      - application/json
+      description: Mendaftar Pada Sebuah Program
+      parameters:
+      - description: Daftar Program
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterProgramRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Daftar Program
+      tags:
+      - programs
 securityDefinitions:
   BearerAuth:
     in: header

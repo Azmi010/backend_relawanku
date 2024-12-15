@@ -141,13 +141,13 @@ func (articleController ArticleController) GetArticlesByCategoryController(c ech
 }
 
 // @Summary      Dapatkan Artikel Sesuai ID
-// @Description  Mengambil daftar semua artikel sesuai kategori
+// @Description  Mengambil daftar semua artikel sesuai ID
 // @Tags         articles
 // @Param 		 id path uint true "Category ID"
 // @Sec
 // @Produce      json
 // @Success      200  {array}   response.ArticleResponse
-// @Router       /api/v1/admin/articles/{id} [get]
+// @Router       /api/v1/user/articles/{id} [get]
 // @Security     BearerAuth
 func (articleController ArticleController) GetArticleByIDController(c echo.Context) error {
 	idParam := c.Param("id")
@@ -160,4 +160,20 @@ func (articleController ArticleController) GetArticleByIDController(c echo.Conte
 		return base.ErrorResponse(c, err)
 	}
 	return base.SuccessResponse(c, article)
+}
+
+// @Summary      Dapatkan Artikel Trending
+// @Description  Mengambil daftar semua artikel urut sesuai trending
+// @Tags         articles
+// @Param 		 category path string true "Trending Article"
+// @Produce      json
+// @Success      200  {array}   response.ArticleResponse
+// @Router       /api/v1/user/article-trending [get]
+// @Security     BearerAuth
+func (articleController ArticleController) GetTrendingArticlesController(c echo.Context) error {
+	articles, err := articleController.ArticleServiceInterface.GetTrendingArticles()
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+	return base.SuccessResponse(c, articles)
 }
