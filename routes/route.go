@@ -23,20 +23,20 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	e.POST("/api/v1/login", rc.AuthController.LoginController)
 	e.POST("/midtrans-callback", rc.TransactionController.MidtransCallback)
 	
-	eJWTAdmin := e.Group("/admin", echojwt.WithConfig(echojwt.Config{
+	eJWTAdmin := e.Group("/api/v1/admin", echojwt.WithConfig(echojwt.Config{
 		SigningKey: []byte(os.Getenv("JWT_SECRET_KEY_ADMIN")),
 	}))
-	eJWTAdmin.POST("/api/v1/donasi", rc.DonasiController.CreateDonasiController)
-	eJWTAdmin.PUT("/api/v1/donasi/:id", rc.DonasiController.UpdateDonasiController)
-	eJWTAdmin.DELETE("/api/v1/donasi/:id", rc.DonasiController.DeleteDonasiController)
-	eJWTAdmin.GET("/api/v1/donasi", rc.DonasiController.GetAllDonasiController)
+	eJWTAdmin.POST("/donasi", rc.DonasiController.CreateDonasiController)
+	eJWTAdmin.PUT("/donasi/:id", rc.DonasiController.UpdateDonasiController)
+	eJWTAdmin.DELETE("/donasi/:id", rc.DonasiController.DeleteDonasiController)
+	eJWTAdmin.GET("/donasi", rc.DonasiController.GetAllDonasiController)
 
-	eJWTUser := e.Group("/user", echojwt.WithConfig(echojwt.Config{
+	eJWTUser := e.Group("/api/v1/user", echojwt.WithConfig(echojwt.Config{
 		SigningKey: []byte(os.Getenv("JWT_SECRET_KEY_USER")),
 	}))
-	eJWTUser.GET("/api/v1/donasi", rc.DonasiController.GetAllDonasiController)
-	eJWTUser.GET("/api/v1/donasi/:category", rc.DonasiController.GetDonasiByCategoryController)
-	eJWTUser.GET("/api/v1/donasi/:id", rc.DonasiController.GetDonasiByIdController)
+	eJWTUser.GET("/donasi", rc.DonasiController.GetAllDonasiController)
+	eJWTUser.GET("/donasi/:category", rc.DonasiController.GetDonasiByCategoryController)
+	eJWTUser.GET("/donasi/:id", rc.DonasiController.GetDonasiByIdController)
 	eJWTUser.POST("/transaction", rc.TransactionController.CreateTransactionController)
 	eJWTUser.GET("/transactions", rc.TransactionController.GetUserTransactions)
 	eJWTUser.GET("/donasi/:id/transactions", rc.TransactionController.GetDonasiTransactions)

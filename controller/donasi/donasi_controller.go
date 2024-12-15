@@ -21,6 +21,15 @@ type DonasiController struct {
 	donasiServiceInterfae donasi.DonasiServiceInterface
 }
 
+// @Summary      Buat Donasi Baru
+// @Description  Membuat donasi baru oleh admin
+// @Tags         donasi
+// @Accept       json
+// @Produce      json
+// @Param        donasi  body      request.DonasiRequest  true  "Informasi Donasi"
+// @Success      201      {object}  map[string]interface{}
+// @Router       /api/v1/admin/donasi [post]
+// @Security     BearerAuth
 func (donasiController DonasiController) CreateDonasiController(c echo.Context) error {
 	donasiCreated := request.DonasiRequest{}
 	if err := c.Bind(&donasiCreated); err != nil {
@@ -41,6 +50,16 @@ func (donasiController DonasiController) CreateDonasiController(c echo.Context) 
 	return base.SuccessResponse(c, response.DonasiFromModel(createdDonasi))
 }
 
+// @Summary      Update Donasi
+// @Description  Memperbarui donasi berdasarkan ID
+// @Tags         donasi
+// @Accept       json
+// @Produce      json
+// @Param        id       path      uint                   true  "ID Donasi"
+// @Param        donasi  body      request.DonasiRequest  true  "Informasi Donasi yang Diperbarui"
+// @Success      200      {object}  map[string]interface{}
+// @Router       /api/v1/admin/donasi/{id} [put]
+// @Security     BearerAuth
 func (donasiController DonasiController) UpdateDonasiController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -67,6 +86,13 @@ func (donasiController DonasiController) UpdateDonasiController(c echo.Context) 
 	return base.SuccessResponse(c, response.DonasiFromModel(updatedDonasi))
 }
 
+// @Summary      Hapus Donasi
+// @Description  Menghapus donasi berdasarkan ID
+// @Tags         donasi
+// @Param        id  path      uint  true  "ID Donasi"
+// @Success      200  {object}  map[string]interface{}
+// @Router       /api/v1/admin/donasi/{id} [delete]
+// @Security     BearerAuth
 func (donasiController DonasiController) DeleteDonasiController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -82,6 +108,13 @@ func (donasiController DonasiController) DeleteDonasiController(c echo.Context) 
 	return base.SuccessResponse(c, "Donasi deleted successfully")
 }
 
+// @Summary      Dapatkan Semua Donasi
+// @Description  Mengambil daftar semua donasi
+// @Tags         donasi
+// @Produce      json
+// @Success      200  {array}   map[string]interface{}
+// @Router       /api/v1/admin/donasi [get]
+// @Security     BearerAuth
 func (donasiController DonasiController) GetAllDonasiController(c echo.Context) error {
 	donasiList, err := donasiController.donasiServiceInterfae.GetAllDonasi()
 	if err != nil {
@@ -90,6 +123,14 @@ func (donasiController DonasiController) GetAllDonasiController(c echo.Context) 
 	return base.SuccessResponse(c, donasiList)
 }
 
+// @Summary      Dapatkan Donasi Sesuai Kategori
+// @Description  Mengambil daftar semua donasi sesuai kategori
+// @Tags         donasi
+// @Param 		 category path string true "Category Donasi"
+// @Produce      json
+// @Success      200  {array}   map[string]interface{}
+// @Router       /api/v1/admin/donasi/{category} [get]
+// @Security     BearerAuth
 func (donasiController DonasiController) GetDonasiByCategoryController(c echo.Context) error {
 	category := c.Param("category")
 
@@ -100,6 +141,15 @@ func (donasiController DonasiController) GetDonasiByCategoryController(c echo.Co
 	return base.SuccessResponse(c, donasiList)
 }
 
+// @Summary      Dapatkan Donasi Sesuai ID
+// @Description  Mengambil daftar semua donasi sesuai ID
+// @Tags         donasi
+// @Param 		 id path uint true "Donasi ID"
+// @Sec
+// @Produce      json
+// @Success      200  {array}   map[string]interface{}
+// @Router       /api/v1/admin/donasi/{id} [get]
+// @Security     BearerAuth
 func (donasiController DonasiController) GetDonasiByIdController(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)

@@ -23,14 +23,31 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/midtrans/midtrans-go"
+	cors "github.com/labstack/echo/v4/middleware"
+	_ "backend_relawanku/docs"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
+// @title           RelawanKu API
+// @version         1.0
+// @description     API untuk aplikasi RelawanKu
+// @host            relawanku.xyz
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	loadEnv()
 	db, _ := config.ConnectDatabase()
 	config.MigrateDB(db)
 
 	e := echo.New()
+	e.Use(cors.CORSWithConfig(cors.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAuthorization},
+	}))
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 
 	midtransClient := helper.NewMidtransClient(helper.MidtransConfig{
