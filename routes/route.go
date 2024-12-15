@@ -46,6 +46,8 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTAdmin.GET("/program/latest", rc.ProgramController.GetLatestProgram) 
 	eJWTAdmin.PUT("/program/:id", rc.ProgramController.UpdateProgram)
 	eJWTAdmin.DELETE("/program/:id", rc.ProgramController.DeleteProgram)
+	eJWTAdmin.GET("/clients", rc.UserController.GetAllUsersController) 
+	eJWTAdmin.DELETE("client/:id", rc.UserController.DeleteUserController) 
 	eJWTAdmin.POST("/donasi", rc.DonasiController.CreateDonasiController)
 	eJWTAdmin.PUT("/donasi/:id", rc.DonasiController.UpdateDonasiController)
 	eJWTAdmin.DELETE("/donasi/:id", rc.DonasiController.DeleteDonasiController)
