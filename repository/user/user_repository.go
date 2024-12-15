@@ -48,3 +48,22 @@ func (userRepo UserRepo) UpdateUser(userId uint, user model.User) (model.User, e
 func (userRepo UserRepo) UpdatePassword(userId uint, newPassword string) error {
 	return userRepo.db.Model(&model.User{}).Where("id = ?", userId).Update("password", newPassword).Error
 }
+
+// GetAllUsers mengambil semua user
+func (userRepo UserRepo) GetAllUsers() ([]model.User, error) {
+	var users []model.User
+	result := userRepo.db.Find(&users)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return users, nil
+}
+
+// DeleteUser menghapus user berdasarkan ID
+func (userRepo UserRepo) DeleteUser(userId uint) error {
+	result := userRepo.db.Delete(&model.User{}, userId)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

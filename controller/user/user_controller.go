@@ -111,3 +111,45 @@ func (userController UserController) UpdatePasswordController(c echo.Context) er
 
 	return base.SuccessResponse(c, "update password success")
 }
+
+// @Summary      Get All Users
+// @Description  Menampilkan semua data user (admin only)
+// @Tags         admin
+// @Produce      json
+// @Success      200  {array}   response.UserResponse
+// @Router       /api/v1/admin/clients [get]
+// @Security     BearerAuth
+func (userController UserController) GetAllUsersController(c echo.Context) error {
+	users, err := userController.userServiceInterfae.GetAllUsers()
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+
+	var clientsResponse []response.ClientsResponse
+	for _, u := range users {
+		clientsResponse = append(clientsResponse, response.Clients(u))
+	}
+	return base.SuccessResponse(c, clientsResponse)
+}
+
+// @Summary      Delete User
+// @Description  Menghapus user berdasarkan ID (admin only)
+// @Tags         admin
+// @Param        id   path      uint  true  "User ID"
+// @Success      200  {object}  map[string]interface{}
+// @Router       /api/v1/admin/clients/{id} [delete]
+// @Security     BearerAuth
+func (userController UserController) DeleteUserController(c echo.Context) error {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return base.ErrorResponse(c, errors.New("invalid user ID"))
+	}
+
+	err = userController.userServiceInterfae.DeleteUser(uint(id))
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+
+	return base.SuccessResponse(c, "user deleted successfully")
+}

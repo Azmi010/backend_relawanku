@@ -14,6 +14,14 @@ type UserResponse struct {
 	ImageUrl  string    `json:"image_url"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	RegTime   time.Time `json:"tanggal_registrasi"` 
+}
+
+type ClientsResponse struct {
+	ID        uint      `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	RegTime   time.Time `json:"tanggal_registrasi"` 
 }
 
 func UserFromModel(user model.User) UserResponse {
@@ -26,5 +34,14 @@ func UserFromModel(user model.User) UserResponse {
 		ImageUrl:  user.ImageUrl,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
+	}
+}
+
+func Clients(user model.User) ClientsResponse {
+	return ClientsResponse{
+		ID:        user.ID,
+		Username:  user.Username,
+		Email:     user.Email,
+		RegTime:  user.CreatedAt,
 	}
 }

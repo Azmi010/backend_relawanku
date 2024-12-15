@@ -81,3 +81,23 @@ func (userService *UserService) UpdatePassword(userId uint, oldPassword string, 
 
 	return nil
 }
+
+// GetAllUsers mengambil semua data user
+func (userService UserService) GetAllUsers() ([]model.User, error) {
+	// Menggunakan method GetAllUsers yang sudah ada di repository
+	users, err := userService.userRepoInterface.GetAllUsers()
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+// DeleteUser menghapus user berdasarkan ID
+func (userService UserService) DeleteUser(userId uint) error {
+	// Menggunakan method DeleteUser yang sudah ada di repository
+	err := userService.userRepoInterface.DeleteUser(userId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
