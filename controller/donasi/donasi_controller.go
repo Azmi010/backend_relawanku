@@ -12,13 +12,13 @@ import (
 )
 
 func NewDonasiController(ds donasi.DonasiServiceInterface) *DonasiController {
-	return &DonasiController{
-		donasiServiceInterfae: ds,
-	}
+    return &DonasiController{
+        DonasiServiceInterface: ds,
+    }
 }
 
 type DonasiController struct {
-	donasiServiceInterfae donasi.DonasiServiceInterface
+    DonasiServiceInterface donasi.DonasiServiceInterface
 }
 
 // @Summary      Buat Donasi Baru
@@ -42,7 +42,7 @@ func (donasiController DonasiController) CreateDonasiController(c echo.Context) 
 	}
 	defer file.Close()
 
-	createdDonasi, err := donasiController.donasiServiceInterfae.CreateDonasi(donasiCreated.DonasiToModel(), file, fileHeader)
+	createdDonasi, err := donasiController.DonasiServiceInterface.CreateDonasi(donasiCreated.DonasiToModel(), file, fileHeader)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -78,7 +78,7 @@ func (donasiController DonasiController) UpdateDonasiController(c echo.Context) 
 	}
 	defer file.Close()
 
-	updatedDonasi, err := donasiController.donasiServiceInterfae.UpdateDonasi(uint(id), donasiUpdated.DonasiToModel(), file, fileHeader)
+	updatedDonasi, err := donasiController.DonasiServiceInterface.UpdateDonasi(uint(id), donasiUpdated.DonasiToModel(), file, fileHeader)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -100,7 +100,7 @@ func (donasiController DonasiController) DeleteDonasiController(c echo.Context) 
 		return base.ErrorResponse(c, errors.New("invalid donasi ID"))
 	}
 
-	err = donasiController.donasiServiceInterfae.DeleteDonasi(uint(id))
+	err = donasiController.DonasiServiceInterface.DeleteDonasi(uint(id))
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -116,7 +116,7 @@ func (donasiController DonasiController) DeleteDonasiController(c echo.Context) 
 // @Router       /api/v1/admin/donasi [get]
 // @Security     BearerAuth
 func (donasiController DonasiController) GetAllDonasiController(c echo.Context) error {
-	donasiList, err := donasiController.donasiServiceInterfae.GetAllDonasi()
+	donasiList, err := donasiController.DonasiServiceInterface.GetAllDonasi()
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -134,7 +134,7 @@ func (donasiController DonasiController) GetAllDonasiController(c echo.Context) 
 func (donasiController DonasiController) GetDonasiByCategoryController(c echo.Context) error {
 	category := c.Param("category")
 
-	donasiList, err := donasiController.donasiServiceInterfae.GetDonasiByCategory(category)
+	donasiList, err := donasiController.DonasiServiceInterface.GetDonasiByCategory(category)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
@@ -157,7 +157,7 @@ func (donasiController DonasiController) GetDonasiByIdController(c echo.Context)
 		return base.ErrorResponse(c, errors.New("invalid donasi ID"))
 	}
 
-	donasi, err := donasiController.donasiServiceInterfae.GetDonasiById(uint(id))
+	donasi, err := donasiController.DonasiServiceInterface.GetDonasiById(uint(id))
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}

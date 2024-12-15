@@ -3,6 +3,7 @@ package dashboard
 import (
 	"backend_relawanku/controller/article"
 	"backend_relawanku/controller/base"
+	"backend_relawanku/controller/donasi"
 	"backend_relawanku/controller/program"
 
 	"github.com/labstack/echo/v4"
@@ -11,12 +12,14 @@ import (
 type DashboardController struct {
 	articleController *article.ArticleController
 	programController *program.ProgramController
+	donasiController  *donasi.DonasiController
 }
 
-func NewDashboardController(articleCtrl *article.ArticleController, programCtrl *program.ProgramController) *DashboardController {
+func NewDashboardController(articleCtrl *article.ArticleController, programCtrl *program.ProgramController, donasiCtrl *donasi.DonasiController) *DashboardController {
 	return &DashboardController{
 		articleController: articleCtrl,
 		programController: programCtrl,
+		donasiController: donasiCtrl,
 	}
 }
 
@@ -31,8 +34,14 @@ func (ctrl *DashboardController) GetDashboardData(c echo.Context) error {
 		return base.ErrorResponse(c, err)
 	}
 
+	donasi, err := ctrl.donasiController.DonasiServiceInterface.GetAllDonasi()
+	if err != nil {
+		return base.ErrorResponse(c, err)
+	}
+
 	return base.SuccessResponse(c, map[string]interface{}{
 		"articles": articles,
 		"programs": programs,
+		"donasi": donasi,
 	})
 }
