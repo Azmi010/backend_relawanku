@@ -18,6 +18,15 @@ func NewUserProgramController(service *registration.UserProgramService) *UserPro
 	return &UserProgramController{service: service}
 }
 
+// @Summary      Daftar Program
+// @Description  Mendaftar Pada Sebuah Program
+// @Tags         programs
+// @Accept       json
+// @Produce      json
+// @Param        program  body      request.RegisterProgramRequest  true  "Daftar Program"
+// @Success      201      {object}  map[string]interface{}
+// @Router       /api/v1/user/register-program [post]
+// @Security     BearerAuth
 func (ctrl *UserProgramController) RegisterProgram(c echo.Context) error {
 	var req request.RegisterProgramRequest
 	if err := c.Bind(&req); err != nil {
@@ -33,6 +42,15 @@ func (ctrl *UserProgramController) RegisterProgram(c echo.Context) error {
 	return base.SuccessResponse(c, res)
 }
 
+// @Summary      Dapatkan Program Sesuai User ID
+// @Description  Mengambil data program yang diikuti sesuai User ID
+// @Tags         programs
+// @Param 		 id path uint true "User ID"
+// @Sec
+// @Produce      json
+// @Success      200  {array}   map[string]interface{}
+// @Router       /api/v1/user/my-program/{id} [get]
+// @Security     BearerAuth
 func (ctrl *UserProgramController) GetUserPrograms(c echo.Context) error {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -44,7 +62,3 @@ func (ctrl *UserProgramController) GetUserPrograms(c echo.Context) error {
 
 	return base.SuccessResponse(c, programs)
 }
-
-
-
-

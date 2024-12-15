@@ -86,8 +86,6 @@ func (userController UserController) UpdateUserController(c echo.Context) error 
 // @Accept       json
 // @Produce      json
 // @Param        id       path      uint                   true  "ID User"
-// @Param        oldPassword       path      string                   true  "Old Password"
-// @Param        newPassword       path      string                   true  "New Password"
 // @Param        user  body      request.UpdatePasswordRequest  true  "Informasi Profile yang Diperbarui"
 // @Success      200      {object}  map[string]interface{}
 // @Router       /api/v1/user/profile/{id} [put]
