@@ -7,34 +7,40 @@ import (
 	repoPro "backend_relawanku/repository/program"
 	userRepo "backend_relawanku/repository/user"
 
-	"backend_relawanku/routes"
-
 	articleController "backend_relawanku/controller/article"
-	authController "backend_relawanku/controller/auth"
 	dashboardController "backend_relawanku/controller/dashboard"
-	userController "backend_relawanku/controller/user"
 	servicePro "backend_relawanku/service/program"
 	userService "backend_relawanku/service/user"
-
-	"backend_relawanku/middleware"
 
 	articleRepo "backend_relawanku/repository/article"
 	authRepo "backend_relawanku/repository/auth"
 	articleService "backend_relawanku/service/article"
 	authService "backend_relawanku/service/auth"
 
+	authController "backend_relawanku/controller/auth"
+	donasiController "backend_relawanku/controller/donasi"
+	transactionController "backend_relawanku/controller/transaction"
+	userController "backend_relawanku/controller/user"
+	"backend_relawanku/helper"
+	"backend_relawanku/middleware"
+	donasiRepo "backend_relawanku/repository/donasi"
+	transactionRepo "backend_relawanku/repository/transaction"
+	"backend_relawanku/routes"
+	donasiService "backend_relawanku/service/donasi"
+	transactionService "backend_relawanku/service/transaction"
 	registController "backend_relawanku/controller/registration"
 	registRepo "backend_relawanku/repository/registration"
 	registService "backend_relawanku/service/registration"
 
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+
+	"github.com/midtrans/midtrans-go"
 	cors "github.com/labstack/echo/v4/middleware"
-
 	_ "backend_relawanku/docs"
-
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
@@ -61,6 +67,12 @@ func main() {
 	authJwt := middleware.JwtAlta{}
 
 	// Auth setup
+	midtransClient := helper.NewMidtransClient(helper.MidtransConfig{
+		ServerKey:   os.Getenv("MIDTRANS_SERVER_KEY"),
+		ClientKey:   os.Getenv("MIDTRANS_CLIENT_KEY"),
+		Environment: midtrans.Sandbox,
+	})
+
 	authRepo := authRepo.NewAuthRepository(db)
 	authService := authService.NewAuthService(authRepo, authJwt)
 	authController := authController.NewAuthController(authService)
@@ -82,11 +94,21 @@ func main() {
 	userService := userService.NewUserService(userRepo)
 	userController := userController.NewUserController(userService)
 
+	donasiRepo := donasiRepo.NewDonasiRepository(db)
+	donasiService := donasiService.NewDonasiService(donasiRepo)
+	donasiController := donasiController.NewDonasiController(donasiService)
+
+	transactionRepo := transactionRepo.NewTransactionRepository(db)
+	transactionService := transactionService.NewTransactionService(transactionRepo, midtransClient)
+	transactionController := transactionController.NewTransactionController(transactionService, donasiService, userService)
+
 	routeController := routes.RouteController{
 		AuthController:   authController,
 		ProgramController: programController,  
 		ArticleController: articleController,
 		DashboardController: dashboardController,
+		DonasiController:      donasiController,
+		TransactionController: transactionController,
 		RegisterController:  registrationController,
 		UserController: userController,
 	}
