@@ -19,18 +19,18 @@ import (
 
 	authController "backend_relawanku/controller/auth"
 	donasiController "backend_relawanku/controller/donasi"
+	registController "backend_relawanku/controller/registration"
 	transactionController "backend_relawanku/controller/transaction"
 	userController "backend_relawanku/controller/user"
 	"backend_relawanku/helper"
 	"backend_relawanku/middleware"
 	donasiRepo "backend_relawanku/repository/donasi"
+	registRepo "backend_relawanku/repository/registration"
 	transactionRepo "backend_relawanku/repository/transaction"
 	"backend_relawanku/routes"
 	donasiService "backend_relawanku/service/donasi"
-	transactionService "backend_relawanku/service/transaction"
-	registController "backend_relawanku/controller/registration"
-	registRepo "backend_relawanku/repository/registration"
 	registService "backend_relawanku/service/registration"
+	transactionService "backend_relawanku/service/transaction"
 
 	"log"
 	"os"
@@ -38,9 +38,10 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 
-	"github.com/midtrans/midtrans-go"
-	cors "github.com/labstack/echo/v4/middleware"
 	_ "backend_relawanku/docs"
+
+	cors "github.com/labstack/echo/v4/middleware"
+	"github.com/midtrans/midtrans-go"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
@@ -85,8 +86,6 @@ func main() {
 	programService := servicePro.NewProgramService(programRepo)  
 	programController := controllerPro.NewProgramController(programService)  
 
-	dashboardController := dashboardController.NewDashboardController(articleController, programController)
-
 	registrationRepo := registRepo.NewUserProgramRepository(db)
 	registrationService := registService.NewUserProgramService(registrationRepo)
 	registrationController := registController.NewUserProgramController(registrationService)
@@ -101,6 +100,8 @@ func main() {
 	transactionRepo := transactionRepo.NewTransactionRepository(db)
 	transactionService := transactionService.NewTransactionService(transactionRepo, midtransClient)
 	transactionController := transactionController.NewTransactionController(transactionService, donasiService, userService)
+
+	dashboardController := dashboardController.NewDashboardController(articleController, programController, donasiController)
 
 	routeController := routes.RouteController{
 		AuthController:   authController,
