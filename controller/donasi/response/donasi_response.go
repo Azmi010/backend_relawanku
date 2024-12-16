@@ -8,6 +8,7 @@ type DonasiResponse struct {
 	ID             uint    `json:"id" form:"id"`
 	Title          string  `json:"title" form:"title"`
 	Description    string  `json:"description" form:"description"`
+	Location       string  `json:"location" form:"location"`
 	News           string  `json:"news" form:"news"`
 	TargetDonation float64 `json:"target_donation" form:"target_donation"`
 	Category       string  `json:"category" form:"category"`
@@ -21,6 +22,7 @@ func DonasiFromModel(donasi model.Donasi) DonasiResponse {
 		ID:             donasi.ID,
 		Title:          donasi.Title,
 		Description:    donasi.Description,
+		Location:       donasi.Location,
 		News:           donasi.News,
 		TargetDonation: donasi.TargetDonation,
 		Category:       donasi.Category,

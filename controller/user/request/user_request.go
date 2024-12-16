@@ -4,9 +4,9 @@ import "backend_relawanku/model"
 
 type UserRequest struct {
 	Username *string `json:"username" form:"username"`
-	Gender   *string `json:"gender" form:"username"`
-	Address  *string `json:"address" form:"username"`
-	ImageUrl *string `json:"image_url" form:"username"`
+	Gender   *string `json:"gender" form:"gender"`
+	Address  *string `json:"address" form:"address"`
+	ImageUrl *string `json:"image_url" form:"image_url"`
 }
 
 func (userRequest *UserRequest) ToModelUser() model.User {

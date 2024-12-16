@@ -129,7 +129,7 @@ func (donasiController DonasiController) GetAllDonasiController(c echo.Context) 
 // @Param 		 category path string true "Category Donasi"
 // @Produce      json
 // @Success      200  {array}   map[string]interface{}
-// @Router       /api/v1/admin/donasi/{category} [get]
+// @Router       /api/v1/user/donasi/{category} [get]
 // @Security     BearerAuth
 func (donasiController DonasiController) GetDonasiByCategoryController(c echo.Context) error {
 	category := c.Param("category")
@@ -148,7 +148,7 @@ func (donasiController DonasiController) GetDonasiByCategoryController(c echo.Co
 // @Sec
 // @Produce      json
 // @Success      200  {array}   map[string]interface{}
-// @Router       /api/v1/admin/donasi/{id} [get]
+// @Router       /api/v1/user/donasi/{id} [get]
 // @Security     BearerAuth
 func (donasiController DonasiController) GetDonasiByIdController(c echo.Context) error {
 	idParam := c.Param("id")
@@ -161,5 +161,5 @@ func (donasiController DonasiController) GetDonasiByIdController(c echo.Context)
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
-	return base.SuccessResponse(c, donasi)
+	return base.SuccessResponse(c, response.DonasiFromModel(donasi))
 }

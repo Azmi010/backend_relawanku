@@ -11,6 +11,7 @@ type Donasi struct {
 	ID             uint                `gorm:"primaryKey"`
 	Title          string              `gorm:"not null" json:"title" form:"title"`
 	Description    string              `gorm:"not null" json:"description" form:"description"`
+	Location       string              `gorm:"not null" json:"location" form:"location"`
 	News           string              `gorm:"not null" json:"news" form:"news"`
 	TargetDonation float64             `gorm:"not null" json:"target_donation" form:"target_donation"`
 	Category       string              `gorm:"not null" json:"category" form:"category"`
@@ -28,6 +29,7 @@ func FromModelDonasi(donasi model.Donasi) Donasi {
 		ID:             donasi.ID,
 		Title:          donasi.Title,
 		Description:    donasi.Description,
+		Location:       donasi.Location,
 		News:           donasi.News,
 		TargetDonation: donasi.TargetDonation,
 		Category:       donasi.Category,
@@ -50,6 +52,7 @@ func (donasi Donasi) ToModelDonasi() model.Donasi {
 		},
 		Title:          donasi.Title,
 		Description:    donasi.Description,
+		Location:       donasi.Location,
 		News:           donasi.News,
 		TargetDonation: donasi.TargetDonation,
 		Category:       donasi.Category,

@@ -159,7 +159,7 @@ func (articleController ArticleController) GetArticleByIDController(c echo.Conte
 	if err != nil {
 		return base.ErrorResponse(c, err)
 	}
-	return base.SuccessResponse(c, article)
+	return base.SuccessResponse(c, response.ArticleFromModel(article))
 }
 
 // @Summary      Dapatkan Artikel Trending

@@ -52,6 +52,8 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTAdmin.PUT("/donasi/:id", rc.DonasiController.UpdateDonasiController)
 	eJWTAdmin.DELETE("/donasi/:id", rc.DonasiController.DeleteDonasiController)
 	eJWTAdmin.GET("/donasi", rc.DonasiController.GetAllDonasiController)
+	eJWTAdmin.GET("/donasi/:id", rc.DonasiController.GetDonasiByIdController)
+	eJWTAdmin.GET("/donasi/:category", rc.DonasiController.GetDonasiByCategoryController)
 	
 	//dashoard admin
 	eJWTAdmin.GET("/dashboard", rc.DashboardController.GetDashboardData)
