@@ -10,11 +10,11 @@ import (
 )
 
 type ProgramService struct {
-	repo *program.ProgramRepository
+    repo program.ProgramRepositoryInterface 
 }
 
-func NewProgramService(repo *program.ProgramRepository) *ProgramService {
-	return &ProgramService{repo: repo}
+func NewProgramService(repo program.ProgramRepositoryInterface) *ProgramService { 
+    return &ProgramService{repo: repo}
 }
 
 func (service *ProgramService) CreateProgram(program model.Program, file multipart.File, fileHeader *multipart.FileHeader) (model.Program, error) {
