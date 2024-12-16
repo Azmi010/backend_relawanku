@@ -112,5 +112,5 @@ func (articleRepo ArticleRepo) GetTrendingArticles() ([]model.Article, error) {
 func (articleRepo ArticleRepo) IncrementArticleView(id uint) error {
 	return articleRepo.db.Model(&model.Article{}).
 		Where("id = ?", id).
-		UpdateColumn("view", gorm.Expr("view + 1")).Error
+		UpdateColumn("View", gorm.Expr("View + 1")).Error
 }
