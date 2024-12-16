@@ -80,7 +80,7 @@ func (userController UserController) UpdateUserController(c echo.Context) error 
 	return base.SuccessResponse(c, response.UserFromModel(updatedUser))
 }
 
-// @Summary      Update Profile
+// @Summary      Update Password
 // @Description  Memperbarui profile berdasarkan ID
 // @Tags         profiles
 // @Accept       json
@@ -88,7 +88,7 @@ func (userController UserController) UpdateUserController(c echo.Context) error 
 // @Param        id       path      uint                   true  "ID User"
 // @Param        user  body      request.UpdatePasswordRequest  true  "Informasi Profile yang Diperbarui"
 // @Success      200      {object}  map[string]interface{}
-// @Router       /api/v1/user/profile/{id} [put]
+// @Router       /api/v1/user/edit-password/{id} [put]
 // @Security     BearerAuth
 func (userController UserController) UpdatePasswordController(c echo.Context) error {
 	idParam := c.Param("id")

@@ -83,5 +83,5 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	// profile user
 	eJWTUser.GET("/profile/:id", rc.UserController.GetUserByIDController)
 	eJWTUser.PUT("/profile/:id", rc.UserController.UpdateUserController)
-	eJWTUser.PUT("/profile/:id", rc.UserController.UpdatePasswordController)
+	eJWTUser.PUT("/edit-password/:id", rc.UserController.UpdatePasswordController)
 }
