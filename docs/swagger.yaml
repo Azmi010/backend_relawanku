@@ -297,6 +297,43 @@ paths:
       summary: Dapatkan Artikel Sesuai Kategori
       tags:
       - articles
+  /api/v1/admin/clients:
+    get:
+      description: Menampilkan semua data user (admin only)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.UserResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get All Users
+      tags:
+      - admin
+  /api/v1/admin/clients/{id}:
+    delete:
+      description: Menghapus user berdasarkan ID (admin only)
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete User
+      tags:
+      - admin
   /api/v1/admin/donasi:
     get:
       description: Mengambil daftar semua donasi
@@ -686,6 +723,36 @@ paths:
       summary: Dapatkan Artikel Sesuai ID
       tags:
       - articles
+  /api/v1/user/edit-password/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui profile berdasarkan ID
+      parameters:
+      - description: ID User
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Informasi Profile yang Diperbarui
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdatePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update Password
+      tags:
+      - profiles
   /api/v1/user/my-program/{id}:
     get:
       description: Mengambil data program yang diikuti sesuai User ID
@@ -748,7 +815,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/request.UpdatePasswordRequest'
+          $ref: '#/definitions/request.UserRequest'
       produces:
       - application/json
       responses:

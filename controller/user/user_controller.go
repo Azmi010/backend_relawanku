@@ -6,6 +6,7 @@ import (
 	"backend_relawanku/controller/user/request"
 	"backend_relawanku/service/user"
 	"errors"
+	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -67,10 +68,12 @@ func (userController UserController) UpdateUserController(c echo.Context) error 
 	}
 
 	file, fileHeader, err := c.Request().FormFile("image_url")
-	if err != nil {
+	if err != nil && err != http.ErrMissingFile {
 		return base.ErrorResponse(c, errors.New("failed to read image file"))
 	}
-	defer file.Close()
+	if file != nil {
+		defer file.Close()
+	}
 
 	updatedUser, err := userController.userServiceInterfae.UpdateUser(uint(id), updateRequest.ToModelUser(), file, fileHeader)
 	if err != nil {

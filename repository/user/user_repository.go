@@ -33,6 +33,7 @@ func (userRepo UserRepo) UpdateUser(userId uint, user model.User) (model.User, e
 		return model.User{}, result.Error
 	}
 
+	userDb.ImageUrl = user.ImageUrl
 	userDb.Username = user.Username
 	userDb.Gender = user.Gender
 	userDb.Address = user.Address

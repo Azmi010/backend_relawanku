@@ -190,6 +190,66 @@
                 }
             }
         },
+        "/api/v1/admin/clients": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Menampilkan semua data user (admin only)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Get All Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.UserResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/clients/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Menghapus user berdasarkan ID (admin only)",
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Delete User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/admin/donasi": {
             "get": {
                 "security": [
@@ -806,6 +866,53 @@
                 }
             }
         },
+        "/api/v1/user/edit-password/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Memperbarui profile berdasarkan ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profiles"
+                ],
+                "summary": "Update Password",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID User",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Informasi Profile yang Diperbarui",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdatePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/my-program/{id}": {
             "get": {
                 "security": [
@@ -911,7 +1018,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.UpdatePasswordRequest"
+                            "$ref": "#/definitions/request.UserRequest"
                         }
                     }
                 ],
