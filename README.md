@@ -38,7 +38,7 @@ Relawanku adalah API yang dirancang sebagai bentuk kampanye sosial guna mengajak
 
 ## ERD
 [ERD Relawanku](https://drive.google.com/file/d/13pWb7eQVOOutY5zNUfvojONACUlahN6r/view?usp=sharing)
-![ERD Relawanku](https://drive.google.com/file/d/13pWb7eQVOOutY5zNUfvojONACUlahN6r/view?usp=sharing)
+![ERD Relawanku](https://imgur.com/a/WesB0zg)
 
 
 ## API Documentation
