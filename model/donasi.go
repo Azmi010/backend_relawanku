@@ -12,5 +12,4 @@ type Donasi struct {
 	ImageUrl string
 	StartedAt string
 	FinishedAt string
-	Transactions []Transaction
 }

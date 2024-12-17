@@ -135,7 +135,7 @@ func (userController UserController) GetAllUsersController(c echo.Context) error
 // @Tags         admin
 // @Param        id   path      uint  true  "User ID"
 // @Success      200  {object}  map[string]interface{}
-// @Router       /api/v1/admin/clients/{id} [delete]
+// @Router       /api/v1/admin/client/{id} [delete]
 // @Security     BearerAuth
 func (userController UserController) DeleteUserController(c echo.Context) error {
 	idParam := c.Param("id")
@@ -146,7 +146,7 @@ func (userController UserController) DeleteUserController(c echo.Context) error 
 
 	err = userController.userServiceInterfae.DeleteUser(uint(id))
 	if err != nil {
-		return base.ErrorResponse(c, err)
+		return base.ErrorResponse(c, errors.New("gabisa"))
 	}
 
 	return base.SuccessResponse(c, "user deleted successfully")
