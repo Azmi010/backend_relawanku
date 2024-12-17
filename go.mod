@@ -5,11 +5,12 @@ go 1.22.0
 toolchain go1.23.0
 
 require (
+	bou.ke/monkey v1.0.2
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.13.0
 	github.com/midtrans/midtrans-go v1.3.8
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/swaggo/swag v1.16.4
 	golang.org/x/crypto v0.30.0
 	google.golang.org/api v0.210.0
