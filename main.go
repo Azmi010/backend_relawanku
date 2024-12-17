@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend_relawanku/config"
+	// "backend_relawanku/helper"
 
 	controllerPro "backend_relawanku/controller/program"
 	repoPro "backend_relawanku/repository/program"
@@ -22,7 +23,8 @@ import (
 	registController "backend_relawanku/controller/registration"
 	transactionController "backend_relawanku/controller/transaction"
 	userController "backend_relawanku/controller/user"
-	"backend_relawanku/helper"
+
+	// "backend_relawanku/helper"
 	"backend_relawanku/middleware"
 	donasiRepo "backend_relawanku/repository/donasi"
 	registRepo "backend_relawanku/repository/registration"
@@ -33,15 +35,14 @@ import (
 	transactionService "backend_relawanku/service/transaction"
 
 	"log"
-	"os"
+	// "os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 
+	cors "github.com/labstack/echo/v4/middleware"
 	_ "backend_relawanku/docs"
 
-	cors "github.com/labstack/echo/v4/middleware"
-	"github.com/midtrans/midtrans-go"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
@@ -64,15 +65,9 @@ func main() {
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAuthorization},
 	}))
+	// helper.InitMidtrans()
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
-
-	// Auth setup
-	midtransClient := helper.NewMidtransClient(helper.MidtransConfig{
-		ServerKey:   os.Getenv("MIDTRANS_SERVER_KEY"),
-		ClientKey:   os.Getenv("MIDTRANS_CLIENT_KEY"),
-		Environment: midtrans.Sandbox,
-	})
 
 	authRepo := authRepo.NewAuthRepository(db)
 	authService := authService.NewAuthService(authRepo, authJwt)
@@ -98,8 +93,8 @@ func main() {
 	donasiController := donasiController.NewDonasiController(donasiService)
 
 	transactionRepo := transactionRepo.NewTransactionRepository(db)
-	transactionService := transactionService.NewTransactionService(transactionRepo, midtransClient)
-	transactionController := transactionController.NewTransactionController(transactionService, donasiService, userService)
+	transactionService := transactionService.NewTransactionService(transactionRepo, donasiRepo)
+	transactionController := transactionController.NewTransactionController(transactionService)
 
 	dashboardController := dashboardController.NewDashboardController(articleController, programController, donasiController)
 
