@@ -3,82 +3,59 @@ package transaction
 import (
 	"backend_relawanku/helper"
 	"backend_relawanku/model"
+	donasiRepo "backend_relawanku/repository/donasi"
 	transactionRepo "backend_relawanku/repository/transaction"
+	"errors"
 	"fmt"
-	"time"
-
-	"github.com/midtrans/midtrans-go"
 )
 
-func NewTransactionService(tr transactionRepo.TransactionRepository, midtransClient *helper.MidtransClient) *TransactionService {
+func NewTransactionService(tr transactionRepo.TransactionRepository, dr donasiRepo.DonasiRepository) *TransactionService {
 	return &TransactionService{
 		transactionRepoInterface: tr,
-		midtransClient: midtransClient,
+		donasiRepoInterface:      dr,
 	}
 }
 
 type TransactionService struct {
 	transactionRepoInterface transactionRepo.TransactionRepository
-	midtransClient *helper.MidtransClient
+	donasiRepoInterface      donasiRepo.DonasiRepository
 }
 
-func (s *TransactionService) CreateDonasiTransaction(donasi model.Donasi, user model.User, nominal float64, note string) (string, string, error) {
-	// Generate unique order ID
-	orderID := fmt.Sprintf("DONASI-%d-%d", donasi.ID, time.Now().UnixNano())
-
-	// Buat transaksi baru
-	transaction := &model.Transaction{
-		Nominal:   nominal,
-		Note:      note,
-		DonasiID:  donasi.ID,
-		UserID:    user.ID,
+func (s *TransactionService) CreateDonasiTransaction(userID, donasiID uint, nominal float64) (model.Transaction, error) {
+	if userID == 0 || donasiID == 0 {
+		return model.Transaction{}, errors.New("user_id or donasi_id is missing")
 	}
 
-	// Siapkan detail transaksi Midtrans
-	snapReq := &midtrans.TransactionDetails{
-		OrderID:  orderID,
-		GrossAmt: int64(nominal),
-	}
-
-	// Generate token Midtrans
-	snapResp, err := s.midtransClient.GenerateToken(snapReq)
+	donasi, err := s.donasiRepoInterface.GetDonasiById(donasiID)
 	if err != nil {
-		return "", "", err
+		return model.Transaction{}, fmt.Errorf("failed to fetch donasi: %w", err)
+	}
+	
+	transaction := model.Transaction{
+		UserID:        userID,
+		DonasiID:      donasiID,
+		Nominal:       nominal,
+		Status:        "Pending",
+		TransactionID: "ORDER-" + helper.GenerateUniqueID(),
 	}
 
-	// Simpan transaksi ke database
-	err = s.transactionRepoInterface.CreateTransaction(transaction)
+	paymentUrl, err := helper.CreateTransaction(
+		transaction.TransactionID,
+		int64(nominal),
+		donasi.Title,
+		donasi.Category,
+		donasi.Category,
+		donasi.Category,
+	)
 	if err != nil {
-		return "", "", err
+		return model.Transaction{}, fmt.Errorf("failed to create payment URL: %w", err)
 	}
+	transaction.PaymentUrl = paymentUrl
 
-	return snapResp.Token, snapResp.RedirectURL, nil
-}
-
-func (s *TransactionService) ProcessMidtransCallback(payload map[string]interface{}) error {
-	// Verifikasi signature
-	if !s.midtransClient.VerifyCallback(payload) {
-		return fmt.Errorf("invalid midtrans signature")
-	}
-
-	orderID := payload["order_id"].(string)
-	status := payload["transaction_status"].(string)
-
-	// Parse order ID untuk mendapatkan transaction ID
-	var transactionID uint
-	_, err := fmt.Sscanf(orderID, "DONASI-%d-%*d", &transactionID)
+	createdTransaction, err := s.transactionRepoInterface.CreateTransaction(transaction)
 	if err != nil {
-		return fmt.Errorf("invalid order ID format")
+		return model.Transaction{}, fmt.Errorf("failed to save transaction: %w", err)
 	}
 
-	// Update status transaksi
-	return s.transactionRepoInterface.UpdateTransactionStatus(transactionID, status)
-}
-
-func (s *TransactionService) GetUserTransactions(userID uint) ([]model.Transaction, error) {
-	return s.transactionRepoInterface.GetUserTransactions(userID)
-}
-
-func (s *TransactionService) GetDonasiTransactions(donasiID uint) ([]model.Transaction, error) {
-	return s.transactionRepoInterface.GetTransactionsByDonasiID(donasiID)
+	return createdTransaction, nil
 }
