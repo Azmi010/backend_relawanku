@@ -9,6 +9,7 @@ type DonasiRequest struct {
 	Description    string  `json:"description" form:"description"`
 	News           string  `json:"news" form:"news"`
 	TargetDonation float64 `json:"target_donation" form:"target_donation"`
+	Location       string  `json:"location" form:"location"`
 	Category       string  `json:"category" form:"category"`
 	ImageUrl       string  `json:"image_url" form:"image_url"`
 	StartedAt      string  `json:"started_at" form:"started_at"`
@@ -21,6 +22,7 @@ func (donasiRequest DonasiRequest) DonasiToModel() model.Donasi {
 		Description:    donasiRequest.Description,
 		News:           donasiRequest.News,
 		TargetDonation: donasiRequest.TargetDonation,
+		Location:       donasiRequest.Location,
 		Category:       donasiRequest.Category,
 		ImageUrl:       donasiRequest.ImageUrl,
 		StartedAt:      donasiRequest.StartedAt,
