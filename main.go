@@ -2,7 +2,7 @@ package main
 
 import (
 	"backend_relawanku/config"
-	"backend_relawanku/helper"
+	// "backend_relawanku/helper"
 
 	controllerPro "backend_relawanku/controller/program"
 	repoPro "backend_relawanku/repository/program"
@@ -65,7 +65,7 @@ func main() {
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAuthorization},
 	}))
-	helper.InitMidtrans()
+	// helper.InitMidtrans()
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 

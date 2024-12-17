@@ -9,8 +9,8 @@ type Donasi struct {
 	Location       string
 	News           string
 	TargetDonation float64
-	Category string
-	ImageUrl string
-	StartedAt string
-	FinishedAt string
+	Category       string
+	ImageUrl       string
+	StartedAt      string
+	FinishedAt     string
 }
