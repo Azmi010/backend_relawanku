@@ -73,6 +73,12 @@ func (rc RouteController) InitRoute(e *echo.Echo) {
 	eJWTUser.GET("/donasi/:category", rc.DonasiController.GetDonasiByCategoryController)
 	eJWTUser.GET("/donasi/:id", rc.DonasiController.GetDonasiByIdController)
 	eJWTUser.POST("/transaction", rc.TransactionController.CreateTransactionController)
+	eJWTUser.POST("/transaction/notification", rc.TransactionController.HandleMidtransNotification)
+	eJWTUser.GET("/transactions", rc.TransactionController.GetAllTransactions)
+	eJWTUser.GET("/transactions/:id", rc.TransactionController.GetTransactionByID)
+	eJWTUser.PUT("/transaction/:id", rc.TransactionController.UpdateTransaction)
+	eJWTUser.PUT("/transaction/:id/status", rc.TransactionController.UpdateTransactionStatus)
+	eJWTUser.DELETE("/transaction/:id", rc.TransactionController.DeleteTransaction)
 	// eJWTUser.GET("/transactions", rc.TransactionController.GetUserTransactions)
 	// eJWTUser.GET("/donasi/:id/transactions", rc.TransactionController.GetDonasiTransactions)
 

@@ -1,7 +1,7 @@
 package helper
 
 import (
-    "log"
+	"log"
 	// "backend_relawanku/model"
 	"math/rand"
 	"os"
@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-    "github.com/midtrans/midtrans-go"
-    "github.com/midtrans/midtrans-go/snap"
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/snap"
 )
 
 var MidtransClient snap.Client
@@ -45,8 +45,8 @@ func CreateTransaction(orderID string, grossAmount int64, Name, Email, PhoneNumb
 		},
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: Name,
-			Email:     Email,
-			Phone:     PhoneNumber,
+			Email: Email,
+			Phone: PhoneNumber,
 			BillAddr: &midtrans.CustomerAddress{
 				Address: Address,
 			},
