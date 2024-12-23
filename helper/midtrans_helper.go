@@ -2,10 +2,8 @@ package helper
 
 import (
 	"log"
-	// "backend_relawanku/model"
 	"math/rand"
 	"os"
-	// "strconv"
 	"time"
 
 	"github.com/joho/godotenv"

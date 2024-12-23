@@ -4,47 +4,45 @@ import (
 	"backend_relawanku/config"
 	"backend_relawanku/helper"
 
-	controllerPro "backend_relawanku/controller/program"
-	repoPro "backend_relawanku/repository/program"
-	userRepo "backend_relawanku/repository/user"
-
+	// controllers
 	articleController "backend_relawanku/controller/article"
-	dashboardController "backend_relawanku/controller/dashboard"
-	servicePro "backend_relawanku/service/program"
-	userService "backend_relawanku/service/user"
-
-	articleRepo "backend_relawanku/repository/article"
-	authRepo "backend_relawanku/repository/auth"
-	articleService "backend_relawanku/service/article"
-	authService "backend_relawanku/service/auth"
-
 	authController "backend_relawanku/controller/auth"
 	donasiController "backend_relawanku/controller/donasi"
+	programController "backend_relawanku/controller/program"
+	dashboardController "backend_relawanku/controller/dashboard"
+	registController "backend_relawanku/controller/registration"
 	transactionController "backend_relawanku/controller/transaction"
 	userController "backend_relawanku/controller/user"
 
-	// "backend_relawanku/helper"
-	registController "backend_relawanku/controller/registration"
-	"backend_relawanku/middleware"
-	donasiRepo "backend_relawanku/repository/donasi"
-	registRepo "backend_relawanku/repository/registration"
-	transactionRepo "backend_relawanku/repository/transaction"
-	"backend_relawanku/routes"
+	// services
+	articleService "backend_relawanku/service/article"
+	authService "backend_relawanku/service/auth"
 	donasiService "backend_relawanku/service/donasi"
+	programService "backend_relawanku/service/program"
 	registService "backend_relawanku/service/registration"
+	userService "backend_relawanku/service/user"
 	transactionService "backend_relawanku/service/transaction"
 
+	// repositories
+	articleRepo "backend_relawanku/repository/article"
+	authRepo "backend_relawanku/repository/auth"
+	donasiRepo "backend_relawanku/repository/donasi"
+	programRepo "backend_relawanku/repository/program"
+	registRepo "backend_relawanku/repository/registration"
+	userRepo "backend_relawanku/repository/user"
+	transactionRepo "backend_relawanku/repository/transaction"
+
+	"backend_relawanku/middleware"
+	"backend_relawanku/routes"
+
 	"log"
-	// "os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-
-	// "github.com/midtrans/midtrans-go"
-	_ "backend_relawanku/docs"
-
 	cors "github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
+
+	_ "backend_relawanku/docs"
 )
 
 // @title           RelawanKu API
@@ -70,13 +68,6 @@ func main() {
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 
-	// Auth setup
-	// midtransClient := helper.NewMidtransClient(helper.MidtransConfig{
-	// 	ServerKey:   os.Getenv("MIDTRANS_SERVER_KEY"),
-	// 	ClientKey:   os.Getenv("MIDTRANS_CLIENT_KEY"),
-	// 	Environment: midtrans.Sandbox,
-	// })
-
 	authRepo := authRepo.NewAuthRepository(db)
 	authService := authService.NewAuthService(authRepo, authJwt)
 	authController := authController.NewAuthController(authService)
@@ -85,9 +76,9 @@ func main() {
 	articleService := articleService.NewArticleService(articleRepo)
 	articleController := articleController.NewArticleController(articleService)
 
-	programRepo := repoPro.NewProgramRepository(db)  
-	programService := servicePro.NewProgramService(programRepo)  
-	programController := controllerPro.NewProgramController(programService)  
+	programRepo := programRepo.NewProgramRepository(db)  
+	programService := programService.NewProgramService(programRepo)  
+	programController := programController.NewProgramController(programService)  
 
 	dashboardController := dashboardController.NewDashboardController(articleController, programController)
 
