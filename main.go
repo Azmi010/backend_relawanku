@@ -10,28 +10,29 @@ import (
 	registController "backend_relawanku/controller/registration"
 	transactionController "backend_relawanku/controller/transaction"
 	userController "backend_relawanku/controller/user"
-
+	
 	// services
 	articleService "backend_relawanku/service/article"
 	authService "backend_relawanku/service/auth"
 	donasiService "backend_relawanku/service/donasi"
 	programService "backend_relawanku/service/program"
 	registService "backend_relawanku/service/registration"
-	userService "backend_relawanku/service/user"
 	transactionService "backend_relawanku/service/transaction"
-
+	userService "backend_relawanku/service/user"
+	
 	// repositories
 	articleRepo "backend_relawanku/repository/article"
 	authRepo "backend_relawanku/repository/auth"
 	donasiRepo "backend_relawanku/repository/donasi"
 	programRepo "backend_relawanku/repository/program"
 	registRepo "backend_relawanku/repository/registration"
-	userRepo "backend_relawanku/repository/user"
 	transactionRepo "backend_relawanku/repository/transaction"
-
+	userRepo "backend_relawanku/repository/user"
+	
 	"backend_relawanku/config"
 	"backend_relawanku/middleware"
 	"backend_relawanku/routes"
+	"backend_relawanku/helper"
 
 	"log"
 
@@ -62,7 +63,7 @@ func main() {
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAuthorization},
 	}))
-	// helper.InitMidtrans()
+	helper.InitMidtrans()
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	authJwt := middleware.JwtAlta{}
 
